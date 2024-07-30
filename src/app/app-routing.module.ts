@@ -1,15 +1,24 @@
+// src/app/app-routing.module.ts
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-
 const routes: Routes = [
-  { path: 'auth',
-    loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)},
-    { path: '', redirectTo: '/auth/login', pathMatch: 'full' }, 
-    { path: '**', redirectTo: '/auth/login' } 
- 
+  { 
+    path: 'auth', 
+    loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
+  },
+  { 
+    path: 'pages',
+    loadChildren: () => import('./pages/pages.module').then(m => m.PagesModule)
+  },
+    
+  { 
+    path: '', redirectTo: '/auth/signup', pathMatch: 'full' 
+  },
+  { 
+    path: '**', redirectTo: '/auth/signup' 
+  },
 ];
-
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

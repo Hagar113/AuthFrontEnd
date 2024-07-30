@@ -1,1 +1,105 @@
-<p>signup works!</p>
+<div class="outer">
+    <div class="container">
+      <div class="row">
+        <div class="offset-md-2 col-lg-5 col-md-7 offset-lg-4 offset-md-3">
+          <div class="panel border bg-white">
+            <div class="panel-heading">
+              <h3 class="pt-3 font-weight-bold">Sign Up</h3>
+            </div>
+            <div class="panel-body p-3">
+              <form [formGroup]="signUpForm" (ngSubmit)="onSignup()">
+                <div class="form-group pt-3">
+                  <div [ngClass]="{'error': signUpForm.controls['userName'].dirty && signUpForm.controls['userName'].hasError('required')}" class="input-field">
+                    <span class="fa fa-user p-2"></span>
+                    <input formControlName="userName" type="text" placeholder="Username">
+                  </div>
+                  <small *ngIf="signUpForm.controls['userName'].dirty && signUpForm.controls['userName'].hasError('required')" class="text-danger">*Username is required</small>
+                </div>
+  
+                <div class="form-group pt-3">
+                  <div [ngClass]="{'error': signUpForm.controls['firstName'].dirty && signUpForm.controls['firstName'].hasError('required')}" class="input-field">
+                    <span class="fa fa-user p-2"></span>
+                    <input formControlName="firstName" type="text" placeholder="First Name">
+                  </div>
+                  <small *ngIf="signUpForm.controls['firstName'].dirty && signUpForm.controls['firstName'].hasError('required')" class="text-danger">*First Name is required</small>
+                </div>
+  
+                <div class="form-group pt-3">
+                  <div [ngClass]="{'error': signUpForm.controls['phone'].dirty && signUpForm.controls['phone'].hasError('required')}" class="input-field">
+                    <span class="fa fa-phone p-2"></span>
+                    <input formControlName="phone" type="text" placeholder="phone">
+                  </div>
+                  <small *ngIf="signUpForm.controls['phone'].dirty && signUpForm.controls['phone'].hasError('required')" class="text-danger">*Phone Number is required</small>
+                </div>
+  
+                <div class="form-group pt-3">
+                  <div [ngClass]="{'error': signUpForm.controls['age'].dirty && signUpForm.controls['age'].hasError('required')}" class="input-field">
+                    <span class="fa fa-calendar p-2"></span>
+                    <input formControlName="age" type="number" placeholder="Age">
+                  </div>
+                  <small *ngIf="signUpForm.controls['age'].dirty && signUpForm.controls['age'].hasError('required')" class="text-danger">*Age is required</small>
+                </div>
+  
+                <div class="form-group pt-3">
+                  <div [ngClass]="{'error': signUpForm.controls['email'].dirty && signUpForm.controls['email'].hasError('required')}" class="input-field">
+                    <span class="fa fa-user p-2"></span>
+                    <input type="text" formControlName="email" placeholder="Email">
+                  </div>
+                  <small *ngIf="signUpForm.controls['email'].dirty && signUpForm.controls['email'].hasError('required')" class="text-danger">*Email is required</small>
+                </div>
+  
+                <div class="form-group pt-3">
+                  <div [ngClass]="{'error': signUpForm.controls['password'].dirty && signUpForm.controls['password'].hasError('required')}" class="input-field">
+                    <span class="fa fa-lock p-2"></span>
+                    <input formControlName="password" [type]="type" placeholder="Password">
+                    <span (click)="hideShowPass()" class="fa {{ eyeIcon }}"></span>
+                  </div>
+                  <small *ngIf="signUpForm.controls['password'].dirty && signUpForm.controls['password'].hasError('required')" class="text-danger">*Password is required</small>
+                </div>
+  
+                
+                <div class="form-group pt-3">
+                  <div [ngClass]="{'error': signUpForm.controls['academicYear'].dirty && signUpForm.controls['academicYear'].hasError('required')}" class="input-field">
+                    <span class="fa fa-calendar p-2"></span>
+                    <input type="text" formControlName="academicYear" placeholder="Academic Year">
+                  </div>
+                  <small *ngIf="signUpForm.controls['academicYear'].dirty && signUpForm.controls['academicYear'].hasError('required')" class="text-danger">*Academic Year is required</small>
+                </div>
+                
+                
+                <div class="form-group pt-3">
+                  <div [ngClass]="{'error': signUpForm.controls['dateOfBirth'].dirty && signUpForm.controls['dateOfBirth'].hasError('required')}" class="input-field">
+                    <span class="fa fa-calendar p-2"></span>
+                    <input type="text" formControlName="dateOfBirth" placeholder="Date of Birth" 
+                           (focus)="changeType('dateOfBirth', 'date')" 
+                           (blur)="resetType('dateOfBirth', 'text')">
+                  </div>
+                  <small *ngIf="signUpForm.controls['dateOfBirth'].dirty && signUpForm.controls['dateOfBirth'].hasError('required')" class="text-danger">*Date of Birth is required</small>
+                </div>
+                
+                <div class="form-group pt-3">
+                  <div [ngClass]="{'error': signUpForm.controls['RoleId'].dirty && signUpForm.controls['RoleId'].hasError('required')}" class="input-field">
+                    <span class="fa fa-user-tag p-2"></span>
+                    <select formControlName="RoleId" class="form-control">
+                      <option value="" disabled>Select Role</option>
+                      <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
+                    </select>
+                  </div>
+                  <small *ngIf="signUpForm.controls['RoleId'].dirty && signUpForm.controls['RoleId'].hasError('required')" class="text-danger">*Role is required</small>
+                </div>
+                
+                
+  
+                <button type="submit" class="btn btn-primary btn-block mt-4 w-100">Sign Up</button>
+  
+                <div class="text-center pt-4 text-muted">
+                  Already have an account? <a id="forget" routerLink="/auth/login">Login</a>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

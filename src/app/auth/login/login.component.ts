@@ -33,8 +33,8 @@ export class LoginComponent implements OnInit {
   }
 
   emailOrPhoneValidator(control: AbstractControl): { [key: string]: boolean } | null {
-    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    const phonePattern = /^(010|011|012)\d{8}$/; 
+    const  emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phonePattern = /^(010|011|012)\d{8}$/;
 
     if (control.value) {
       if (emailPattern.test(control.value) || phonePattern.test(control.value)) {
