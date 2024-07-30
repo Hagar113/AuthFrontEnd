@@ -33,7 +33,7 @@ export class LookupService {
     return this.apiConfigService.post<RoleResponse>(`${this.endpoint}/GetRoleById`, requestPayload);
   }
   saveRole(requestPayload: BaseRequestHeader): Observable<void> {
-    return this.apiConfigService.post<void>(`${this.endpoint}/SaveRole`,requestPayload);
+    return this.apiConfigService.post<void>(`${this.endpoint}/SaveRole`, requestPayload);
   }
   
   

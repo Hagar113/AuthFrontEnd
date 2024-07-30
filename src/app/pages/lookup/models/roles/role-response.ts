@@ -1,4 +1,4 @@
-// src/app/models/role-response.model.ts
+
 
 export interface Role {
     id: number;
@@ -7,7 +7,7 @@ export interface Role {
     
   }
   export interface RoleResponse {
-    success: boolean; // Add this field to match your API response structure
-    result: Role[];
-    responseMessage?: string; // Optional field for error messages
+    success: boolean; 
+    result:Role| Role[];
+    responseMessage?: string; 
   } 

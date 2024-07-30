@@ -23,7 +23,7 @@ export class ViewComponent implements OnInit {
     this.lookupService.getAllRoles().subscribe({
       next: (response: RoleResponse) => {
         if (response.success) {
-          this.roles = response.result;
+          this.roles =Array.isArray(response.result)?response.result:[response.result] ;
         } else {
           console.error('Failed to fetch roles', response.responseMessage);
         }

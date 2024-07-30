@@ -1,4 +1,3 @@
-// src/app/components/form/form.component.ts
 
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -68,18 +67,18 @@ export class FormComponent implements OnInit {
   save(): void {
     if (this.roleForm.valid) {
       const saveRoleRequest: SaveRoleRequest = {
-        id: this.roleForm.value.id,
+        id: this.roleForm.value.id || 0,
         name: this.roleForm.value.name,
         roleCode: this.roleForm.value.roleCode
       };
 
-      const baseRequestHeader: BaseRequestHeader = {
+      const requestPayload: BaseRequestHeader = {
         userId: 0,
-        languageCode: 'en',
-        data: JSON.stringify(saveRoleRequest)
+        languageCode: 'en', 
+        data: saveRoleRequest
       };
 
-      this.lookupService.saveRole(baseRequestHeader).subscribe({
+      this.lookupService.saveRole(requestPayload).subscribe({
         next: () => {
           alert(this.roleForm.value.id ? 'Role updated successfully' : 'Role created successfully');
           this.roleForm.reset();
@@ -87,11 +86,14 @@ export class FormComponent implements OnInit {
         },
         error: (err: any) => {
           console.error('Failed to save role', err);
-          alert('Failed to save role');
+          alert('Failed to save role. Please try again later.');
         }
       });
+    } else {
+      alert('Please correct the errors in the form.');
     }
   }
+  
 
   cancel(): void {
     this.router.navigate(['/roles']);
