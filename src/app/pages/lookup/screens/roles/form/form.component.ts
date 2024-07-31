@@ -4,8 +4,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LookupService } from '../../../service/lookup.service';
 import { SaveRoleRequest } from '../../../models/roles/save-role-request';
-import { BaseRequestHeader } from '../../../models/roles/base-request-header';
+
 import { RoleResponse } from '../../../models/roles/role-response';
+import { BaseRequestHeader } from 'src/app/shared/models/base-request-header';
 
 
 @Component({

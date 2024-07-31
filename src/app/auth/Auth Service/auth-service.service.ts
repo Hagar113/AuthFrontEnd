@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ApiConfigService } from 'src/app/Shared Services/api-config.service';
+
 import { RoleResponse } from '../models/role-response';
+import { ApiConfigService } from 'src/app/shared/shared service/api-config.service';
 interface SignupResponse {
   message: string;
 }

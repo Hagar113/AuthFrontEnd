@@ -3,8 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LookupService } from '../../../service/lookup.service';
 import { SaveSubjectRequest } from '../../../models/subjects/save-subject-request';
-import { BaseRequestHeader } from '../../../models/roles/base-request-header';
+
 import { Subject, SubjectResponse } from '../../../models/subjects/subject-response'; 
+import { BaseRequestHeader } from 'src/app/shared/models/base-request-header';
 
 @Component({
   selector: 'app-subject-form',

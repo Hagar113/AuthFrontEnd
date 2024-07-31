@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ApiConfigService } from 'src/app/Shared Services/api-config.service';
+
 
 import { Observable } from 'rxjs';
 
@@ -7,8 +7,10 @@ import { Subject, SubjectResponse } from '../models/subjects/subject-response';
 
 import { SaveRoleRequest } from '../models/roles/save-role-request';
 import { RoleResponse } from '../models/roles/role-response';
-import { BaseRequestHeader } from '../models/roles/base-request-header';
+
 import { DeleteSubjectRequest } from '../models/subjects/delete-subject-request';
+import { ApiConfigService } from 'src/app/shared/shared service/api-config.service';
+import { BaseRequestHeader } from 'src/app/shared/models/base-request-header';
 
 @Injectable({
   providedIn: 'root'
