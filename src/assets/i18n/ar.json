@@ -1,0 +1,13 @@
+{
+    "home": "الرئيسية",
+    "roles": "الأدوار",
+    "subjects": "المواد",
+    "disabled": "معطل",
+    "searchPlaceholder": "بحث",
+    "searchButton": "بحث",
+    "english": "إنجليزي",
+    "arabic": "عربي",
+    "flagIconEn": "assets/flag-icon-en.svg",
+    "flagIconEg": "assets/flag-icon-eg.svg",
+    "language": "اللغة"
+  }

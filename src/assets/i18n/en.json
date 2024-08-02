@@ -1,0 +1,12 @@
+{"home": "Home",
+"roles": "Roles",
+"subjects": "Subjects",
+"disabled": "Disabled",
+"searchPlaceholder": "Search",
+"searchButton": "Search",
+"english": "English",
+"arabic": "Arabic",
+"flagIconEn": "assets/flag-icon-en.svg",
+"flagIconEg": "assets/flag-icon-eg.svg",
+"language": "Language"
+}

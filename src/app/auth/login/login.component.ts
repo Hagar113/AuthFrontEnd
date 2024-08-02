@@ -22,10 +22,12 @@ export class LoginComponent implements OnInit {
       password: ['', [
         Validators.required,
         Validators.minLength(8),  
-        Validators.pattern(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/)] 
-      ]
+        Validators.pattern(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/)
+      ]],
+      rememberMe: [false]
     });
   }
+
   hideShowPass() {
     this.isText = !this.isText;
     this.eyeIcon = this.isText ? "fa-eye" : "fa-eye-slash";
@@ -33,7 +35,7 @@ export class LoginComponent implements OnInit {
   }
 
   emailOrPhoneValidator(control: AbstractControl): { [key: string]: boolean } | null {
-    const  emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const phonePattern = /^(010|011|012)\d{8}$/;
 
     if (control.value) {
@@ -53,16 +55,22 @@ export class LoginComponent implements OnInit {
           password: this.loginForm.value.password
         }
       };
-  
-      console.log('Request Payload:', formData); // Log the payload for debugging
-  
+
+      console.log('Request Payload:', formData); 
+
       this.auth.login(formData).subscribe({
         next: (res:any) => {
-          console.log('Response:', res); // Log the response for debugging
+          console.log('Response:', res); 
           alert(res.message || 'Login successful');
+          
+          if (this.loginForm.value.rememberMe) {
+            localStorage.setItem("UserResponse", JSON.stringify(res));
+          } else {
+            sessionStorage.setItem("UserResponse", JSON.stringify(res));
+          }
         },
         error: (err:any) => {
-          console.error('Error:', err); // Log the error for debugging
+          console.error('Error:', err); 
           alert(err.error.message || 'An error occurred during login');
         }
       });
@@ -71,7 +79,4 @@ export class LoginComponent implements OnInit {
       ValidateForm.validateAllFormFileds(this.loginForm);
     }
   }
-
-
-
 }
