@@ -15,38 +15,31 @@ import { NavbarComponent } from './layout/navbar/navbar.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 export function createTranslateLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http,'./assets/il82/','.json');
+  return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 }
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    FooterComponent,
-    NavbarComponent,
-    
-  
-    
-  ],
+  declarations: [AppComponent, FooterComponent, NavbarComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    AuthModule ,
+    AuthModule,
     HttpClientModule,
     ReactiveFormsModule,
     SharedModule,
     PagesModule,
     TranslateModule.forRoot({
-      defaultLanguage:'en',
+      defaultLanguage: 'en',
       loader: {
         provide: TranslateLoader,
         useFactory: createTranslateLoader,
-        deps: [HttpClient]
-      }
-    })],
-     
-    
-    
+        deps: [HttpClient],
+      },
+    }),
+  ],
+  exports: [],
+
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

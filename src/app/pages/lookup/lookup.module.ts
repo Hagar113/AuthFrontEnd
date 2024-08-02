@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule} from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LookupRoutingModule } from './lookup-routing.module';
 import { ViewComponent } from './screens/roles/view/view.component';
@@ -8,8 +8,7 @@ import { SubjectViewComponent } from './screens/subject/subject-view/subject-vie
 import { SubjectFormComponent } from './screens/subject/subject-form/subject-form.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { HomeComponent } from './screens/home/home/home.component';
-
-
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [
@@ -17,15 +16,14 @@ import { HomeComponent } from './screens/home/home/home.component';
     FormComponent,
     SubjectViewComponent,
     SubjectFormComponent,
-    HomeComponent
+    HomeComponent,
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     LookupRoutingModule,
-    
     FormsModule,
-    
-  ]
+    TranslateModule
+  ],
 })
-export class LookupModule { }
+export class LookupModule {}

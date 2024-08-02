@@ -1,4 +1,3 @@
-
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -7,12 +6,12 @@ import { SaveRoleRequest } from '../../../models/roles/save-role-request';
 
 import { RoleResponse } from '../../../models/roles/role-response';
 import { BaseRequestHeader } from 'src/app/shared/models/base-request-header';
-
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-role-form',
   templateUrl: './form.component.html',
-  styleUrls: ['./form.component.css']
+  styleUrls: ['./form.component.css'],
 })
 export class FormComponent implements OnInit {
   roleForm: FormGroup;
@@ -22,17 +21,22 @@ export class FormComponent implements OnInit {
     private fb: FormBuilder,
     private lookupService: LookupService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private translate: TranslateService
   ) {
     this.roleForm = this.fb.group({
       id: [null],
       name: ['', [Validators.required, Validators.minLength(3)]],
-      roleCode: ['', [Validators.required, Validators.pattern(/^[A-Z0-9]{3,10}$/)]]
+      roleCode: [
+        '',
+        [Validators.required, Validators.pattern(/^[A-Z0-9]{3,10}$/)],
+      ],
     });
+    this.currentLang = localStorage.getItem('currentLang') || 'en';
   }
-
+  currentLang: string = '';
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap.subscribe((params) => {
       this.id = +params.get('id')!;
       if (this.id && this.id !== 0) {
         this.loadRole(this.id);
@@ -61,7 +65,7 @@ export class FormComponent implements OnInit {
       error: (err: any) => {
         console.error('Failed to load role', err);
         alert('Failed to load role');
-      }
+      },
     });
   }
 
@@ -70,31 +74,34 @@ export class FormComponent implements OnInit {
       const saveRoleRequest: SaveRoleRequest = {
         id: this.roleForm.value.id || 0,
         name: this.roleForm.value.name,
-        roleCode: this.roleForm.value.roleCode
+        roleCode: this.roleForm.value.roleCode,
       };
 
       const requestPayload: BaseRequestHeader = {
         userId: 0,
-        languageCode: 'en', 
-        data: saveRoleRequest
+        languageCode: 'en',
+        data: saveRoleRequest,
       };
 
       this.lookupService.saveRole(requestPayload).subscribe({
         next: () => {
-          alert(this.roleForm.value.id ? 'Role updated successfully' : 'Role created successfully');
+          alert(
+            this.roleForm.value.id
+              ? 'Role updated successfully'
+              : 'Role created successfully'
+          );
           this.roleForm.reset();
           this.router.navigate(['pages/lookup/roleForm', 0]);
         },
         error: (err: any) => {
           console.error('Failed to save role', err);
           alert('Failed to save role. Please try again later.');
-        }
+        },
       });
     } else {
       alert('Please correct the errors in the form.');
     }
   }
-  
 
   cancel(): void {
     this.router.navigate(['/roles']);
