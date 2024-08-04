@@ -12,10 +12,34 @@ export class ViewComponent implements OnInit {
   roles: Role[] = [];
   pageName: string = 'roleView';
   columns = [
-    { key: 'id', title: 'Id' },
+    { key: 'displayId', title: 'Id' },
     { key: 'name', title: 'Name' },
     { key: 'roleCode', title: 'Role Code' },
-   // { key: 'actions', title: 'Actions' },
+  ];
+
+  actions = [
+    {
+      key: 'edit',
+      title: 'Edit',
+      handler: (rowData: any) => {
+        if (rowData && rowData.id) {
+          this.editRole(rowData.id);
+        } else {
+          console.error('Invalid rowData for edit:', rowData);
+        }
+      },
+    },
+    {
+      key: 'delete',
+      title: 'Delete',
+      handler: (rowData: any) => {
+        if (rowData && rowData.id) {
+          this.deleteRole(rowData.id);
+        } else {
+          console.error('Invalid rowData for delete:', rowData);
+        }
+      },
+    },
   ];
 
   constructor(private lookupService: LookupService, private router: Router) {}
@@ -28,8 +52,12 @@ export class ViewComponent implements OnInit {
     this.lookupService.getAllRoles().subscribe({
       next: (response: RoleResponse) => {
         if (response.success) {
-          this.roles = Array.isArray(response.result) ? response.result : [response.result];
-          console.log('Roles fetched successfully:', this.roles); 
+          const roles = Array.isArray(response.result) ? response.result : [response.result];
+          this.roles = roles.map((role, index) => ({
+            ...role,
+            displayId: index + 1,
+          }));
+          console.log('Roles fetched successfully:', this.roles);
         } else {
           console.error('Failed to fetch roles', response.responseMessage);
         }

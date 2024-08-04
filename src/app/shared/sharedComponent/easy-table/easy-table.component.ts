@@ -10,8 +10,8 @@ export class EasyTableComponent implements OnInit {
   @Input() inputData: any[] = [];
   @Input() pageName: string = '';
   @Input() inputColumns: Columns[] = [];
-  @Output() edit = new EventEmitter<number>();
-  @Output() delete = new EventEmitter<number>();
+  @Input() actions: { key: string, title: string, handler: (rowData: any) => void }[] = []; // Configurable actions
+  @Output() actionTriggered = new EventEmitter<{ key: string, rowData: any }>();
 
   public configuration!: Config;
   public columns!: Columns[];
@@ -30,13 +30,27 @@ export class EasyTableComponent implements OnInit {
       },
     ];
     this.configuration = { ...DefaultConfig };
+
+    console.log('Input Data:', this.inputData);
   }
 
-  editRole(roleId: number): void {
-    this.edit.emit(roleId);
-  }
+  handleAction(actionKey: string, rowData: any): void {
+    console.log('Received rowData:', rowData);
 
-  deleteRole(roleId: number): void {
-    this.delete.emit(roleId);
+    const action = this.actions.find(a => a.key === actionKey);
+    if (action) {
+      if (rowData) {
+        if (rowData.id !== undefined) {
+          console.log(`Performing action '${actionKey}' with rowData.id:`, rowData.id);
+          action.handler(rowData);
+        } else {
+          console.error('Invalid rowData: Missing id', rowData);
+        }
+      } else {
+        console.error('Invalid rowData: undefined');
+      }
+    } else {
+      console.error('Action not found:', actionKey);
+    }
   }
 }

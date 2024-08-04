@@ -5,14 +5,14 @@
 </div>
 
 <!-- Template for actions column -->
-<ng-template #actionsTemplate let-rowData="rowData">
+<ng-template #actionsTemplate let-rowData>
   <div class="btn-group">
     <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
       Actions
     </button>
     <ul class="dropdown-menu">
-      <li><a class="dropdown-item" (click)="editRole(rowData.id)">Edit</a></li>
-      <li><a class="dropdown-item text-danger" (click)="deleteRole(rowData.id)">Delete</a></li>
+      <li><a class="dropdown-item" (click)="handleAction('edit', rowData)">Edit</a></li>
+      <li><a class="dropdown-item text-danger" (click)="handleAction('delete', rowData)">Delete</a></li>
     </ul>
   </div>
 </ng-template>

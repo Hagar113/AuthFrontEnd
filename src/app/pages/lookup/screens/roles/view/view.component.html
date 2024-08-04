@@ -11,7 +11,12 @@
   </div>
   <div class="row justify-content-center">
     <div class="col-12">
-      <app-easy-table [inputData]="roles" [pageName]="pageName" [inputColumns]="columns" (edit)="editRole($event)" (delete)="deleteRole($event)"></app-easy-table>
+      <app-easy-table 
+        [inputData]="roles" 
+        [pageName]="pageName" 
+        [inputColumns]="columns" 
+        [actions]="actions">
+      </app-easy-table>
     </div>
   </div>
 </div>
