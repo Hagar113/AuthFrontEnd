@@ -24,3 +24,4 @@ export class ApiConfigService {
   delete<T>(url: string): Observable<T> {
     return this.http.delete<T>(`${this.baseUrl}/${url}`);
   }}
+  
