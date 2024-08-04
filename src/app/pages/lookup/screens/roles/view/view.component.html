@@ -11,34 +11,7 @@
   </div>
   <div class="row justify-content-center">
     <div class="col-12">
-      <table class="table table-striped table-hover">
-        <thead>
-          <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Role Code</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let role of roles; let i = index">
-            <td>{{ role.id }}</td>
-            <td>{{ role.name }}</td>
-            <td>{{ role.roleCode }}</td>
-            <td>
-              <div class="btn-group">
-                <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                  Actions
-                </button>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item"  (click)="editRole(role.id)">Edit</a></li>
-                  <li><a class="dropdown-item text-danger" (click)="deleteRole(role.id)">Delete</a></li>
-                </ul>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <app-easy-table [inputData]="roles" [pageName]="pageName" [inputColumns]="columns"></app-easy-table>
     </div>
   </div>
 </div>

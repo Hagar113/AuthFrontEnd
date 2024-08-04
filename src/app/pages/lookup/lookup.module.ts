@@ -23,7 +23,8 @@ import { TranslateModule } from '@ngx-translate/core';
     ReactiveFormsModule,
     LookupRoutingModule,
     FormsModule,
-    TranslateModule
+    TranslateModule,
+    SharedModule,
   ],
 })
 export class LookupModule {}

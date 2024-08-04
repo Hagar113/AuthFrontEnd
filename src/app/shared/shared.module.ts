@@ -8,19 +8,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EasyTableComponent } from './sharedComponent/easy-table/easy-table.component';
 
 @NgModule({
-  declarations: [
-
-  
-    
-  
-    EasyTableComponent
-  ],
+  declarations: [EasyTableComponent],
   imports: [
     CommonModule,
     SharedRoutingModule,
     TableModule,
     FormsModule,
-    ReactiveFormsModule
-  ]
+    ReactiveFormsModule,
+  ],
+  exports: [EasyTableComponent],
 })
-export class SharedModule { }
+export class SharedModule {}
