@@ -15,7 +15,7 @@ export class ViewComponent implements OnInit {
     { key: 'id', title: 'Id' },
     { key: 'name', title: 'Name' },
     { key: 'roleCode', title: 'Role Code' },
-    { key: 'actions', title: 'Actions' },
+   // { key: 'actions', title: 'Actions' },
   ];
 
   constructor(private lookupService: LookupService, private router: Router) {}

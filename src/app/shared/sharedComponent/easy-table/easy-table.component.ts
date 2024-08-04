@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, TemplateRef, Output, EventEmitter } from '@angular/core';
 import { Columns, Config, DefaultConfig } from 'ngx-easy-table';
 
 @Component({
@@ -10,10 +10,14 @@ export class EasyTableComponent implements OnInit {
   @Input() inputData: any[] = [];
   @Input() pageName: string = '';
   @Input() inputColumns: Columns[] = [];
+  @Output() edit = new EventEmitter<number>();
+  @Output() delete = new EventEmitter<number>();
 
   public configuration!: Config;
   public columns!: Columns[];
   public data: any[] = [];
+
+  @ViewChild('actionsTemplate', { static: true }) actionsTemplate!: TemplateRef<any>;
 
   ngOnInit(): void {
     this.data = this.inputData;
@@ -22,35 +26,17 @@ export class EasyTableComponent implements OnInit {
       {
         key: 'actions',
         title: 'Actions',
-        cellTemplate: this.getActionsTemplate(),
+        cellTemplate: this.actionsTemplate,
       },
     ];
     this.configuration = { ...DefaultConfig };
   }
 
-  getActionsTemplate(): any {
-    return (rowIndex: number) => `
-      <div class="btn-group">
-        <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-          Actions
-        </button>
-        <ul class="dropdown-menu">
-          <li><a class="dropdown-item" (click)="editRole(${rowIndex})">Edit</a></li>
-          <li><a class="dropdown-item text-danger" (click)="deleteRole(${rowIndex})">Delete</a></li>
-        </ul>
-      </div>
-    `;
+  editRole(roleId: number): void {
+    this.edit.emit(roleId);
   }
 
-  editRole(rowIndex: number): void {
-    const roleId = this.data[rowIndex].id;
-    // Call parent component's editRole method
-    (this as any).editRole(roleId);
-  }
-
-  deleteRole(rowIndex: number): void {
-    const roleId = this.data[rowIndex].id;
-    // Call parent component's deleteRole method
-    (this as any).deleteRole(roleId);
+  deleteRole(roleId: number): void {
+    this.delete.emit(roleId);
   }
 }
