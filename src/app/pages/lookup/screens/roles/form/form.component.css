@@ -1,0 +1,28 @@
+/* Hide dropdown arrow when not focused */
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: transparent;
+    border: 1px solid #ced4da;
+  }
+  
+  /* Optional: Add a custom arrow */
+  select::-ms-expand {
+    display: none; /* Remove default arrow for IE */
+  }
+  
+  /* Custom styling for dropdown */
+  .select-container {
+    position: relative;
+  }
+  
+  .select-container::after {
+    content: '▼'; /* Custom dropdown arrow */
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+  

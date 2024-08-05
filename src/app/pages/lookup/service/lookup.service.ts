@@ -97,7 +97,6 @@ export class LookupService {
     return this.apiConfigService.get<PagesResponse>(`${this.pagesEndpoint}/GetAllPages`);
   }
   
-  
   getPageById(id: number): Observable<PagesResponse> {
     const requestPayload: BaseRequestHeader = {
       userId: null,

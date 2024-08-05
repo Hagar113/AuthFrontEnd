@@ -3,10 +3,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LookupService } from '../../../service/lookup.service';
 import { SaveRoleRequest } from '../../../models/roles/save-role-request';
-import { RoleResponse } from '../../../models/roles/role-response';
+import { Role, RoleResponse } from '../../../models/roles/role-response';
 import { BaseRequestHeader } from 'src/app/shared/models/base-request-header';
 import { TranslateService } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
+import { Page, PagesResponse } from '../../../models/pages/page-response';
 
 @Component({
   selector: 'app-role-form',
@@ -16,7 +17,7 @@ import Swal from 'sweetalert2';
 export class FormComponent implements OnInit {
   roleForm: FormGroup;
   id: number | null = null;
-  currentLang: string = '';
+  dropdownOptions: Array<{ value: string; label: string }> = [];
 
   constructor(
     private fb: FormBuilder,
@@ -28,15 +29,14 @@ export class FormComponent implements OnInit {
     this.roleForm = this.fb.group({
       id: [null],
       name: ['', [Validators.required, Validators.minLength(3)]],
-      roleCode: [
-        '',
-        [Validators.required, Validators.pattern(/^[A-Z0-9]{3,10}$/)],
-      ],
+      roleCode: ['', [Validators.required, Validators.pattern(/^[A-Z0-9]{3,10}$/)]],
+      dropdown: [[], Validators.required]  // Ensure this is an array
     });
-    this.currentLang = localStorage.getItem('currentLang') || 'en';
   }
 
   ngOnInit(): void {
+    this.loadPages(); // Load pages when component initializes
+
     this.route.paramMap.subscribe((params) => {
       this.id = +params.get('id')!;
       if (this.id && this.id !== 0) {
@@ -54,11 +54,35 @@ export class FormComponent implements OnInit {
     });
   }
 
+  loadPages(): void {
+    this.lookupService.getAllPages().subscribe({
+      next: (response: PagesResponse) => {
+        if (response.success) {
+          const pages: Page[] = Array.isArray(response.result) ? response.result : [response.result];
+          this.dropdownOptions = pages.map((page: Page) => ({
+            value: page.id.toString(),
+            label: page.name
+          }));
+        } else {
+          Swal.fire('Error', 'Failed to load pages', 'error');
+        }
+      },
+      error: (err: any) => {
+        console.error('Failed to load pages', err);
+        Swal.fire('Error', 'Failed to load pages', 'error');
+      },
+    });
+  }
+
   loadRole(id: number): void {
     this.lookupService.getRoleById(id).subscribe({
       next: (response: RoleResponse) => {
         if (response.success && response.result) {
-          this.roleForm.patchValue(response.result);
+          const role = response.result as Role;
+          this.roleForm.patchValue({
+            ...role,
+            dropdown: role.dropdown || []
+          });
         } else {
           Swal.fire('Error', 'Role not found', 'error');
         }
@@ -76,6 +100,7 @@ export class FormComponent implements OnInit {
         id: this.roleForm.value.id || 0,
         name: this.roleForm.value.name,
         roleCode: this.roleForm.value.roleCode,
+        dropdown: this.roleForm.value.dropdown
       };
 
       const requestPayload: BaseRequestHeader = {
@@ -109,7 +134,7 @@ export class FormComponent implements OnInit {
   cancel(): void {
     Swal.fire({
       title: 'Are you sure?',
-      text: "You won't be able to revert this!",
+      text: 'Any unsaved changes will be lost!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -118,10 +143,18 @@ export class FormComponent implements OnInit {
       cancelButtonText: 'No, keep it'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.router.navigate(['/pages/lookup/roles']);
+        if (this.id && this.id !== 0) {
+          // If editing an existing item, reload the data
+          this.loadRole(this.id);
+        } else {
+          // If adding a new item, reset the form
+          this.roleForm.reset();
+        }
+        this.router.navigate(['pages/lookup/roleForm', 0]);
       }
     });
   }
+  
 
   get name() {
     return this.roleForm.get('name');
@@ -129,5 +162,9 @@ export class FormComponent implements OnInit {
 
   get roleCode() {
     return this.roleForm.get('roleCode');
+  }
+
+  get dropdown() {
+    return this.roleForm.get('dropdown');
   }
 }
