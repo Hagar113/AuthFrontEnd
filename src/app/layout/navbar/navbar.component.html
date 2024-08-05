@@ -16,43 +16,49 @@
                 <li class="nav-item">
                     <a class="nav-link" routerLink="/pages/lookup/subjects" translate>subjects</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/pages/lookup/pages" translate>pages</a>
+                </li>
                 <!-- --------------------------------->
                 <li class="nav-item dropdown">
                     <a class="nav-link text-dark mx-2 dropdown-toggle Links" href="#" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false" translate>
-                        language
-                    </a>
+                    data-bs-toggle="dropdown" aria-expanded="false" translate>
+                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-translate" viewBox="0 0 16 16">
+                       <path d="M4.545 6.714 4.11 8H3l1.862-5h1.284L8 8H6.833l-.435-1.286zm1.634-.736L5.5 3.956h-.049l-.679 2.022z"/>
+                       <path d="M0 2a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v3h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-3H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zm7.138 9.995q.289.451.63.846c-.748.575-1.673 1.001-2.768 1.292.178.217.451.635.555.867 1.125-.359 2.08-.844 2.886-1.494.777.665 1.739 1.165 2.93 1.472.133-.254.414-.673.629-.89-1.125-.253-2.057-.694-2.82-1.284.681-.747 1.222-1.651 1.621-2.757H14V8h-3v1.047h.765c-.318.844-.74 1.546-1.272 2.13a6 6 0 0 1-.415-.492 2 2 0 0 1-.94.31"/>
+                     </svg> language
+                 </a>
                     <ul class="dropdown-menu navBG p-0">
                         <li class="hoverNavDD  text-center">
-                            <a class="dropdown-item text-dark" (click)="switchLanguage('en')">English
+                            <a class="dropdown-item text-dark" (click)="switchLanguage('en')">
                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                    width="30" height="30" viewBox="0 0 7410 3900">
-                                    <path d="M0,0h7410v3900H0" fill="#b31942" />
-                                    <path d="M0,450H7410m0,600H0m0,600H7410m0,600H0m0,600H7410m0,600H0" stroke="#FFF"
-                                        stroke-width="300" />
-                                    <path d="M0,0h2964v2100H0" fill="#0a3161" />
+                                     width="30" height="30" viewBox="0 0 7410 3900">
+                                    <path d="M0,0h7410v3900H0" fill="#b31942"/>
+                                    <path d="M0,450H7410m0,600H0m0,600H7410m0,600H0m0,600H7410m0,600H0" stroke="#FFF" stroke-width="300"/>
+                                    <path d="M0,0h2964v2100H0" fill="#0a3161"/>
                                     <g fill="#FFF">
                                         <g id="s18">
                                             <g id="s9">
                                                 <g id="s5">
                                                     <g id="s4">
-                                                        <path id="s"
-                                                            d="M247,90 317.534230,307.082039 132.873218,172.917961H361.126782L176.465770,307.082039z" />
-                                                        <use xlink:href="#s" y="420" />
-                                                        <use xlink:href="#s" y="840" />
-                                                        <use xlink:href="#s" y="1260" />
+                                                        <path id="s" d="M247,90 317.534230,307.082039 132.873218,172.917961H361.126782L176.465770,307.082039z"/>
+                                                        <use xlink:href="#s" y="420"/>
+                                                        <use xlink:href="#s" y="840"/>
+                                                        <use xlink:href="#s" y="1260"/>
                                                     </g>
-                                                    <use xlink:href="#s" y="1680" />
+                                                    <use xlink:href="#s" y="1680"/>
                                                 </g>
-                                                <use xlink:href="#s4" x="247" y="210" />
+                                                <use xlink:href="#s4" x="247" y="210"/>
                                             </g>
-                                            <use xlink:href="#s9" x="494" />
+                                            <use xlink:href="#s9" x="494"/>
                                         </g>
-                                        <use xlink:href="#s18" x="988" />
-                                        <use xlink:href="#s9" x="1976" />
-                                        <use xlink:href="#s5" x="2470" />
+                                        <use xlink:href="#s18" x="988"/>
+                                        <use xlink:href="#s9" x="1976"/>
+                                        <use xlink:href="#s5" x="2470"/>
                                     </g>
-                                </svg></a>
+                                </svg>
+                                English
+                            </a>
                         </li>
                         <li class="hoverNavDD text-center">
                             <a class="dropdown-item text-dark" (click)="switchLanguage('ar')">العربية
@@ -231,27 +237,7 @@
                     </ul>
                 </li>
                 <!--  ----------------------------------->
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false" translate>
-                        <i class="fas fa-globe"></i>
-                        Language
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a class="dropdown-item" href="#" (click)="switchLanguage('en')">
-                                <img src="assets/flag-icon-en.svg" alt="English"
-                                    style="width: 20px; height: 15px; margin-right: 8px;" translate> English
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="#" (click)="switchLanguage('ar')">
-                                <img src="assets/flag-icon-eg.svg" alt="Arabic"
-                                    style="width: 20px; height: 15px; margin-right: 8px;" translate> Arabic
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+               
                 <li class="nav-item">
                     <a class="nav-link disabled" aria-disabled="true" translate>Disabled</a>
                 </li>

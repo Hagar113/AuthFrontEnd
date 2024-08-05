@@ -11,6 +11,7 @@ import { RoleResponse } from '../models/roles/role-response';
 import { DeleteSubjectRequest } from '../models/subjects/delete-subject-request';
 import { ApiConfigService } from 'src/app/shared/shared service/api-config.service';
 import { BaseRequestHeader } from 'src/app/shared/models/base-request-header';
+import { PagesResponse } from '../models/pages/page-response';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,7 @@ import { BaseRequestHeader } from 'src/app/shared/models/base-request-header';
 export class LookupService {
   private endpoint = 'Admin';
   private subjectsEndpoint = 'Admin';
+  private pagesEndpoint = 'Admin';
   constructor(private apiConfigService: ApiConfigService) { }
 
   getAllRoles(): Observable<RoleResponse> {
@@ -49,6 +51,7 @@ export class LookupService {
   
     return this.apiConfigService.post<void>(`${this.endpoint}/DeleteRole`, requestPayload);
   }
+  
   
   getAllSubjects(): Observable<SubjectResponse> {
     const requestPayload: BaseRequestHeader = {
@@ -82,5 +85,39 @@ export class LookupService {
       data: deleteSubjectRequest
     };
     return this.apiConfigService.post<void>(`${this.subjectsEndpoint}/DeleteSubject`, requestPayload);
+  }
+  // Pages
+  getAllPages(): Observable<PagesResponse> {
+    const requestPayload: BaseRequestHeader = {
+      userId: 0,
+      languageCode: 'en',
+      data: ''
+    };
+  
+    return this.apiConfigService.get<PagesResponse>(`${this.pagesEndpoint}/GetAllPages`);
+  }
+  
+  
+  getPageById(id: number): Observable<PagesResponse> {
+    const requestPayload: BaseRequestHeader = {
+      userId: null,
+      languageCode: 'en',
+      data: JSON.stringify({ PageId: id })
+    };
+  
+    return this.apiConfigService.post<PagesResponse>(`${this.pagesEndpoint}/GetPageById`, requestPayload);
+  }
+
+  savePage(requestPayload: BaseRequestHeader): Observable<void> {
+    return this.apiConfigService.post<void>(`${this.pagesEndpoint}/SavePage`, requestPayload);
+  }
+
+  deletePage(pageId: number): Observable<void> {
+    const requestPayload: BaseRequestHeader = {
+      userId: 0,  
+      languageCode: 'en',
+      data: JSON.stringify({ PageId: pageId })
+    };
+    return this.apiConfigService.post<void>(`${this.pagesEndpoint}/DeletePage`, requestPayload);
   }
 }

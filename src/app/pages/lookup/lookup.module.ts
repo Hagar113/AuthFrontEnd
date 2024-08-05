@@ -9,6 +9,8 @@ import { SubjectFormComponent } from './screens/subject/subject-form/subject-for
 import { SharedModule } from 'src/app/shared/shared.module';
 import { HomeComponent } from './screens/home/home/home.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { PagesViewComponent } from './screens/pages/pages-view/pages-view.component';
+import { PagesFormComponent } from './screens/pages/pages-form/pages-form.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +19,8 @@ import { TranslateModule } from '@ngx-translate/core';
     SubjectViewComponent,
     SubjectFormComponent,
     HomeComponent,
+    PagesViewComponent,
+    PagesFormComponent,
   ],
   imports: [
     CommonModule,

@@ -8,6 +8,8 @@ import {
 import { AuthServiceService } from '../Auth Service/auth-service.service';
 import ValidateForm from '../helpers/ValidateForm';
 import { LoginResponse } from '../models/login-response';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-login',
@@ -20,7 +22,7 @@ export class LoginComponent implements OnInit {
   eyeIcon: string = 'fa-eye-slash';
   loginForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private auth: AuthServiceService) {}
+  constructor(private fb: FormBuilder, private auth: AuthServiceService, private router: Router) {}
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -123,7 +125,6 @@ export class LoginComponent implements OnInit {
         next: (res: LoginResponse) => {
           console.log('Response:', res);
   
-          // تأكد من استخدام اسم خاصية التوكين الصحيح
           if (res.result && res.result.token) {
             localStorage.setItem('token', res.result.token);
           }
@@ -136,6 +137,9 @@ export class LoginComponent implements OnInit {
           } else {
             localStorage.setItem('rememberMe', 'false');
           }
+
+          
+          this.router.navigate(['pages/lookup/home']);
         },
         error: (err: any) => {
           console.error('Error:', err);
@@ -147,7 +151,6 @@ export class LoginComponent implements OnInit {
       ValidateForm.validateAllFormFileds(this.loginForm);
     }
   }
-  
   
   
   

@@ -73,6 +73,61 @@ export class SignupComponent implements OnInit {
     }
   }
 
+  // onSignup() {
+  //   if (this.signUpForm.valid) {
+  //     // Additional validation for dateOfBirth and age
+  //     const dob = new Date(this.signUpForm.value.dateOfBirth);
+  //     const today = new Date();
+  //     let calculatedAge = today.getFullYear() - dob.getFullYear();
+  //     if (dob > new Date(today.setFullYear(today.getFullYear() - calculatedAge))) {
+  //       calculatedAge--;
+  //     }
+  
+  //     if (this.signUpForm.value.age !== calculatedAge) {
+  //       alert("Age does not match the date of birth.");
+  //       return;
+  //     }
+
+  //     // Update role validation based on RoleId
+  //     const selectedRole = this.roles.find(role => role.id == this.signUpForm.value.RoleId);
+  //     if (!selectedRole) {
+  //       alert("Invalid role selected.");
+     
+  //       return;
+  //     }
+  
+  //     if (selectedRole.code === 'STUDENT_CODE' && (calculatedAge < 14 || calculatedAge > 25)) {
+  //       alert("Invalid age for student.");
+  //       return;
+  //     }
+  
+  //     if (selectedRole.code === 'TEACHER_CODE' && (calculatedAge < 25 || calculatedAge > 60)) {
+  //       alert("Invalid age for teacher.");
+  //       return;
+  //     }
+  
+  //     const formData = {
+  //       data: this.signUpForm.value  // Wrap form data in "data" object
+  //     };
+  
+  //     //console.log('Payload:', formData);  // Log the payload for debugging
+  //     console.log(this.signUpForm.value);
+  //     this.auth.signup(formData).subscribe({
+  //       next: (res:any) => {
+  //         console.log('Response:', res);
+  //         alert(res.message || 'Sign Up Successful');
+  //         this.redirectBasedOnRole(this.signUpForm.value.RoleId);
+  //       },
+  //       error: (err:any) => {
+  //         alert(err.error.message || 'An error occurred during sign up');
+  //         console.log(JSON.stringify(formData));
+  //       }
+  //     });
+  //   } else {
+  //     ValidateForm.validateAllFormFileds(this.signUpForm);
+  //     alert("Please fill in all required fields correctly.");
+  //   }
+  // }
   onSignup() {
     if (this.signUpForm.valid) {
       // Additional validation for dateOfBirth and age
@@ -87,12 +142,11 @@ export class SignupComponent implements OnInit {
         alert("Age does not match the date of birth.");
         return;
       }
-
+  
       // Update role validation based on RoleId
       const selectedRole = this.roles.find(role => role.id == this.signUpForm.value.RoleId);
       if (!selectedRole) {
         alert("Invalid role selected.");
-     
         return;
       }
   
@@ -110,13 +164,13 @@ export class SignupComponent implements OnInit {
         data: this.signUpForm.value  // Wrap form data in "data" object
       };
   
-      //console.log('Payload:', formData);  // Log the payload for debugging
-      console.log(this.signUpForm.value);
+      // Log the payload for debugging
+      console.log('Payload:', formData);
       this.auth.signup(formData).subscribe({
         next: (res:any) => {
           console.log('Response:', res);
           alert(res.message || 'Sign Up Successful');
-          this.redirectBasedOnRole(this.signUpForm.value.RoleId);
+          this.router.navigate(['/auth/login']); // Redirect to login page
         },
         error: (err:any) => {
           alert(err.error.message || 'An error occurred during sign up');
@@ -133,7 +187,7 @@ export class SignupComponent implements OnInit {
     const role = this.roles.find(role => role.id === roleId);
     switch (role?.code) {
       case 'STUDENT_CODE':
-        this.router.navigate(['/student']);
+        this.router.navigate(['/pages/lookup/student']);
         break;
       case 'TEACHER_CODE':
         this.router.navigate(['/teacher']);

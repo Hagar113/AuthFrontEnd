@@ -1,20 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LookupService } from '../../../service/lookup.service';
-import { SaveRoleRequest } from '../../../models/roles/save-role-request';
-import { RoleResponse } from '../../../models/roles/role-response';
+
+
 import { BaseRequestHeader } from 'src/app/shared/models/base-request-header';
 import { TranslateService } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
+import { LookupService } from '../../../service/lookup.service';
+import { PagesResponse } from '../../../models/pages/page-response';
+import { SavePageRequest } from '../../../models/pages/save-page-request';
 
 @Component({
-  selector: 'app-role-form',
-  templateUrl: './form.component.html',
-  styleUrls: ['./form.component.css'],
+  selector: 'app-page-form',
+  templateUrl: './pages-form.component.html',
+  styleUrls: ['./pages-form.component.css'],
 })
-export class FormComponent implements OnInit {
-  roleForm: FormGroup;
+export class PagesFormComponent implements OnInit {
+  pageForm: FormGroup;
   id: number | null = null;
   currentLang: string = '';
 
@@ -25,13 +27,9 @@ export class FormComponent implements OnInit {
     private route: ActivatedRoute,
     private translate: TranslateService
   ) {
-    this.roleForm = this.fb.group({
+    this.pageForm = this.fb.group({
       id: [null],
       name: ['', [Validators.required, Validators.minLength(3)]],
-      roleCode: [
-        '',
-        [Validators.required, Validators.pattern(/^[A-Z0-9]{3,10}$/)],
-      ],
     });
     this.currentLang = localStorage.getItem('currentLang') || 'en';
   }
@@ -40,7 +38,7 @@ export class FormComponent implements OnInit {
     this.route.paramMap.subscribe((params) => {
       this.id = +params.get('id')!;
       if (this.id && this.id !== 0) {
-        this.loadRole(this.id);
+        this.loadPage(this.id);
       }
     });
 
@@ -49,56 +47,55 @@ export class FormComponent implements OnInit {
       const urlId = Number(url.substring(url.lastIndexOf('/') + 1));
       if (urlId && urlId !== 0 && urlId !== this.id) {
         this.id = urlId;
-        this.loadRole(this.id);
+        this.loadPage(this.id);
       }
     });
   }
 
-  loadRole(id: number): void {
-    this.lookupService.getRoleById(id).subscribe({
-      next: (response: RoleResponse) => {
+  loadPage(id: number): void {
+    this.lookupService.getPageById(id).subscribe({
+      next: (response: PagesResponse) => {
         if (response.success && response.result) {
-          this.roleForm.patchValue(response.result);
+          this.pageForm.patchValue(response.result);
         } else {
-          Swal.fire('Error', 'Role not found', 'error');
+          Swal.fire('Error', 'Page not found', 'error');
         }
       },
       error: (err: any) => {
-        console.error('Failed to load role', err);
-        Swal.fire('Error', 'Failed to load role', 'error');
+        console.error('Failed to load page', err);
+        Swal.fire('Error', 'Failed to load page', 'error');
       },
     });
   }
 
   save(): void {
-    if (this.roleForm.valid) {
-      const saveRoleRequest: SaveRoleRequest = {
-        id: this.roleForm.value.id || 0,
-        name: this.roleForm.value.name,
-        roleCode: this.roleForm.value.roleCode,
+    if (this.pageForm.valid) {
+      const savePageRequest: SavePageRequest = {
+        id: this.pageForm.value.id || 0,
+        name: this.pageForm.value.name,
       };
 
       const requestPayload: BaseRequestHeader = {
         userId: 0,
         languageCode: 'en',
-        data: saveRoleRequest,
+        data: savePageRequest,
       };
 
-      this.lookupService.saveRole(requestPayload).subscribe({
+      this.lookupService.savePage(requestPayload).subscribe({
         next: () => {
           Swal.fire(
             'Success',
-            this.roleForm.value.id
-              ? 'Role updated successfully'
-              : 'Role created successfully',
+            this.pageForm.value.id
+              ? 'Page updated successfully'
+              : 'Page created successfully',
             'success'
           );
-          this.roleForm.reset();
-          this.router.navigate(['pages/lookup/roleForm', 0]);
+          this.pageForm.reset();
+          this.router.navigate(['pages/lookup/pageForm', 0]);
         },
         error: (err: any) => {
-          console.error('Failed to save role', err);
-          Swal.fire('Error', 'Failed to save role. Please try again later.', 'error');
+          console.error('Failed to save page', err);
+          Swal.fire('Error', 'Failed to save page. Please try again later.', 'error');
         },
       });
     } else {
@@ -118,16 +115,12 @@ export class FormComponent implements OnInit {
       cancelButtonText: 'No, keep it'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.router.navigate(['/pages/lookup/roles']);
+        this.router.navigate(['/pages/lookup/pages']);
       }
     });
   }
 
   get name() {
-    return this.roleForm.get('name');
-  }
-
-  get roleCode() {
-    return this.roleForm.get('roleCode');
+    return this.pageForm.get('name');
   }
 }
