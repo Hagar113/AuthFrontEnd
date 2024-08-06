@@ -13,6 +13,16 @@
           <li class="nav-item" *ngFor="let page of pages">
             <a class="nav-link" [routerLink]="page.pagePath" routerLinkActive="active">{{ page.pageName }}</a>
           </li>
+          <li class="nav-item ms-auto">
+            <a class="nav-link" routerLink="/auth/login" routerLinkActive="active">
+              <i class="fas fa-sign-in-alt"></i> {{'login' | translate}}
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/auth/signup" routerLinkActive="active">
+              <i class="fas fa-user-plus"></i> {{'signup' | translate}}
+            </a>
+          </li>
                 <!-- --------------------------------->
                 <li class="nav-item dropdown">
                     <a class="nav-link text-dark mx-2 dropdown-toggle Links" href="#" role="button"

@@ -118,7 +118,7 @@ export class LoginComponent implements OnInit {
     this.auth.validateUserRole(request).subscribe({
       next: (res: PagesResponse) => {
         if (res.success && res.result && res.result.pages && Array.isArray(res.result.pages)) {
-          // تأكد من أن كل كائن يحتوي على pagePath
+      
           const pagesWithPaths = res.result.pages.map(page => ({
             pageId: page.pageId,
             pageName: page.pageName,
