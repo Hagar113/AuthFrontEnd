@@ -3,6 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { AuthServiceService } from 'src/app/auth/Auth Service/auth-service.service';
 import { PageDto } from 'src/app/auth/models/page-dto';
 import { Router, NavigationEnd } from '@angular/router';
+import { Page } from 'src/app/pages/lookup/models/pages/page-response';
 
 @Component({
   selector: 'app-navbar',
@@ -33,17 +34,22 @@ export class NavbarComponent implements OnInit {
   loadPagesFromLocalStorage(): void {
     const userPagesStr = localStorage.getItem('userPages');
     if (userPagesStr) {
-      const userPages = JSON.parse(userPagesStr);
-      if (userPages && userPages.pages) {
-        this.pages = userPages.pages;
-      } else {
-        console.error('Pages data is missing or invalid');
+      try {
+        const userPages: Page[] = JSON.parse(userPagesStr);
+        if (Array.isArray(userPages)) {
+          this.pages = userPages;
+        } else {
+          console.error('Pages data is missing or invalid');
+        }
+      } catch (error) {
+        console.error('Error parsing pages data:', error);
       }
     } else {
       console.error('No pages found in local storage');
     }
   }
-
+  
+  
   updateNavbarVisibility(url: string) {
     const hideNavbarPaths = ['/auth/login', '/auth/signup'];
     this.showNavbar = !hideNavbarPaths.some(path => url.includes(path));
