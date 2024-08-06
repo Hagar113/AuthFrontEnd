@@ -57,11 +57,11 @@ export class FormComponent implements OnInit {
   loadPages(): void {
     this.lookupService.getAllPages().subscribe({
       next: (response: PagesResponse) => {
-        if (response.success) {
-          const pages: Page[] = Array.isArray(response.result) ? response.result : [response.result];
+        if (response.success && response.result && Array.isArray(response.result.pages)) {
+          const pages: Page[] = response.result.pages;
           this.dropdownOptions = pages.map((page: Page) => ({
-            value: page.id.toString(),
-            label: page.name
+            value: page.pageId.toString(), // Ensure you use the correct property
+            label: page.pageName
           }));
         } else {
           Swal.fire('Error', 'Failed to load pages', 'error');
@@ -73,7 +73,7 @@ export class FormComponent implements OnInit {
       },
     });
   }
-
+  
   loadRole(id: number): void {
     this.lookupService.getRoleById(id).subscribe({
       next: (response: RoleResponse) => {

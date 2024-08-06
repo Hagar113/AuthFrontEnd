@@ -1,15 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-  AbstractControl,
-} from '@angular/forms';
-import { AuthServiceService } from '../Auth Service/auth-service.service';
-import ValidateForm from '../helpers/ValidateForm';
-import { LoginResponse } from '../models/login-response';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
-
+import { AuthServiceService } from '../Auth Service/auth-service.service';
+import { LoginResponse } from '../models/login-response';
+import ValidateForm from '../helpers/ValidateForm';
+import { Page, PagesResponse } from 'src/app/pages/lookup/models/pages/page-response';
+import { PageDto } from '../models/page-dto';
+import { mapPageToPageDto } from '../helpers/page-mapper';
 
 @Component({
   selector: 'app-login',
@@ -27,27 +24,22 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     this.loginForm = this.fb.group({
       loginId: ['', [Validators.required, this.emailOrPhoneValidator]],
-      password: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(8),
-          Validators.pattern(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/),
-        ],
-      ],
+      password: ['', [Validators.required, Validators.minLength(8), Validators.pattern(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/)]],
       rememberMe: [false],
     });
-    const remmmemberMe = localStorage.getItem('remmmemberMe') || 'false';
+    this.loadRememberedUser();
+  }
 
-    if (remmmemberMe && remmmemberMe == 'true') {
+  loadRememberedUser() {
+    const rememberMe = localStorage.getItem('rememberMe') || 'false';
+    if (rememberMe === 'true') {
       const formDataStr = localStorage.getItem('formData');
       if (formDataStr) {
-        const requet = JSON.parse(formDataStr);
-
+        const request = JSON.parse(formDataStr);
         this.loginForm.patchValue({
-          loginId: requet.data.email_phone,
-          password: requet.data.password,
-          remmmemberMe: true,
+          loginId: request.data.email_phone,
+          password: request.data.password,
+          rememberMe: true,
         });
       }
     }
@@ -59,17 +51,11 @@ export class LoginComponent implements OnInit {
     this.type = this.isText ? 'text' : 'password';
   }
 
-  emailOrPhoneValidator(
-    control: AbstractControl
-  ): { [key: string]: boolean } | null {
+  emailOrPhoneValidator(control: AbstractControl): { [key: string]: boolean } | null {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const phonePattern = /^(010|011|012)\d{8}$/;
-
     if (control.value) {
-      if (
-        emailPattern.test(control.value) ||
-        phonePattern.test(control.value)
-      ) {
+      if (emailPattern.test(control.value) || phonePattern.test(control.value)) {
         return null;
       }
       return { emailOrPhone: true };
@@ -77,39 +63,6 @@ export class LoginComponent implements OnInit {
     return null;
   }
 
-  // onLogin() {
-  //   if (this.loginForm.valid) {
-  //     const formData = {
-  //       data: {
-  //         email_phone: this.loginForm.value.loginId,
-  //         password: this.loginForm.value.password,
-  //       },
-  //     };
-
-  //     console.log('Request Payload:', formData);
-
-  //     this.auth.login(formData).subscribe({
-  //       next: (res: any) => {
-  //         console.log('Response:', res);
-  //         alert(res.message || 'Login successful');
-
-  //         if (this.loginForm.value.rememberMe == true) {
-  //           localStorage.setItem('UserRequest', JSON.stringify(formData));
-  //           localStorage.setItem('remmmemberMe', 'true');
-  //         } else {
-  //           localStorage.setItem('remmmemberMe', 'false');
-  //         }
-  //       },
-  //       error: (err: any) => {
-  //         console.error('Error:', err);
-  //         alert(err.error.message || 'An error occurred during login');
-  //       },
-  //     });
-  //   } else {
-  //     alert('Please fill in all required fields correctly.');
-  //     ValidateForm.validateAllFormFileds(this.loginForm);
-  //   }
-  // }
   onLogin() {
     if (this.loginForm.valid) {
       const formData = {
@@ -118,19 +71,24 @@ export class LoginComponent implements OnInit {
           password: this.loginForm.value.password,
         },
       };
-  
+
       console.log('Request Payload:', formData);
-  
+
       this.auth.login(formData).subscribe({
         next: (res: LoginResponse) => {
           console.log('Response:', res);
-  
+
           if (res.result && res.result.token) {
             localStorage.setItem('token', res.result.token);
           }
-  
+
+          if (res.result && res.result.userDto && res.result.userDto.role) {
+            localStorage.setItem('role', res.result.userDto.role.name);
+            this.fetchPagesAndStore(res.result.userDto.id, res.result.userDto.role.id);
+          }
+
           alert(res.responseMessage || 'Login successful');
-  
+
           if (this.loginForm.value.rememberMe) {
             localStorage.setItem('formData', JSON.stringify(formData));
             localStorage.setItem('rememberMe', 'true');
@@ -138,7 +96,6 @@ export class LoginComponent implements OnInit {
             localStorage.setItem('rememberMe', 'false');
           }
 
-          
           this.router.navigate(['pages/lookup/home']);
         },
         error: (err: any) => {
@@ -151,7 +108,30 @@ export class LoginComponent implements OnInit {
       ValidateForm.validateAllFormFileds(this.loginForm);
     }
   }
+
+  fetchPagesAndStore(userId: number, roleId: number) {
+    const request = {
+      userId: userId,
+      roleId: roleId
+    };
   
+    this.auth.validateUserRole(request).subscribe({
+      next: (res: PagesResponse) => {
+        if (res.success && res.result && res.result.pages) {
+          // Ensure `pages` is correctly populated
+          const pages = Array.isArray(res.result.pages) ? res.result.pages : [];
+          this.auth.storeUserData(roleId.toString(), pages);
   
+          // Store pages in local storage
+          localStorage.setItem('userPages', JSON.stringify({ pages }));
+        } else {
+          console.error('Pages data is missing or invalid', res);
+        }
+      },
+      error: (err: any) => {
+        console.error('Error:', err);
+      }
+    });
+  }
   
-}
+}  

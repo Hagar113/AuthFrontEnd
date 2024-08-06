@@ -1,13 +1,23 @@
-
+// src/app/pages/lookup/models/pages/page-response.ts
 
 export interface Page {
-    id: number;
-    name: string;
-    
-    
+    pageId: number;
+    pageName: string;
+    pagePath:string;
+    // Add any other properties needed
   }
+  
+  export interface PagesResult {
+    isValid: boolean;
+    pages: Page[];
+  }
+  
   export interface PagesResponse {
-    success: boolean; 
-    result:Page| Page[];
-    responseMessage?: string; 
-  } 
+    statusCode: number;
+    requestId: string;
+    error: any[];
+    result: PagesResult;
+    success: boolean;
+    responseMessage: string | null;
+  }
+  
