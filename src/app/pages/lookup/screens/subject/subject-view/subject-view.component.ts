@@ -3,6 +3,8 @@ import { DeleteSubjectRequest } from '../../../models/subjects/delete-subject-re
 import { Subject, SubjectResponse } from '../../../models/subjects/subject-response'; // Adjusted import
 import { LookupService } from '../../../service/lookup.service';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-subject-view',
@@ -13,12 +15,16 @@ export class SubjectViewComponent implements OnInit {
   subjects: Subject[] = [];
   pageName: string = 'subjectView';
   columns = [
-    { key: 'displayId', title: 'Id' },
-    { key: 'name', title: 'Name' },
-    { key: 'academicYear', title: 'Academic Year' },
+    { key: 'displayId', title: this.translate.instant('Id') },
+    { key: 'name', title: this.translate.instant('Name') },
+    { key: 'academicYear', title: this.translate.instant('Academic Year') },
   ];
 
-  constructor(private lookupService: LookupService, private router: Router) {}
+  constructor(
+    private lookupService: LookupService,
+    private router: Router,
+    private translate: TranslateService
+  ) {}
 
   ngOnInit(): void {
     this.getSubjects();
@@ -46,21 +52,40 @@ export class SubjectViewComponent implements OnInit {
   }
 
   confirmDeleteSubject(subjectId: number): void {
-    const confirmDelete = confirm('Are you sure you want to delete this subject?');
-    if (confirmDelete) {
-      this.deleteSubject(subjectId);
-    }
+    Swal.fire({
+      title: this.translate.instant('Are you sure?'),
+      text: this.translate.instant('You won\'t be able to revert this!'),
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: this.translate.instant('Yes, delete it!'),
+      cancelButtonText: this.translate.instant('No, keep it')
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.deleteSubject(subjectId);
+      }
+    });
   }
 
   deleteSubject(subjectId: number): void {
     const request: DeleteSubjectRequest = { subjectId };
     this.lookupService.deleteSubject(request).subscribe({
       next: () => {
-        alert('Subject deleted successfully');
+        Swal.fire({
+          icon: 'success',
+          title: this.translate.instant('Deleted'),
+          text: this.translate.instant('Subject deleted successfully')
+        });
         this.getSubjects(); // Refresh the list after deletion
       },
       error: (err) => {
         console.error('Failed to delete subject', err);
+        Swal.fire({
+          icon: 'error',
+          title: this.translate.instant('Error'),
+          text: this.translate.instant('Failed to delete subject')
+        });
       },
     });
   }

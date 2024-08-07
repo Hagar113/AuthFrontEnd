@@ -1,6 +1,10 @@
 <div class="columns mt-2">
   <div class="column col-12">
-    <ngx-table [data]="inputData" [configuration]="configuration" [columns]="columns"></ngx-table>
+    <ngx-table 
+      [data]="inputData" 
+      [configuration]="configuration" 
+      [columns]="columns">
+    </ngx-table>
   </div>
 </div>
 
@@ -14,8 +18,8 @@
       </svg>
     </button>
     <ul class="dropdown-menu">
-      <li><a class="dropdown-item" (click)="handleAction('edit', rowData)">Edit</a></li>
-      <li><a class="dropdown-item text-danger" (click)="handleAction('delete', rowData)">Delete</a></li>
+      <li><a class="dropdown-item" (click)="handleAction('edit', rowData)">{{ 'Edit' | translate}}</a></li>
+      <li><a class="dropdown-item text-danger" (click)="handleAction('delete', rowData)">{{ 'Delete' | translate }}</a></li>
     </ul>
   </div>
 </ng-template>

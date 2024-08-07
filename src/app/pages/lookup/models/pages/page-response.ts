@@ -4,7 +4,7 @@ export interface Page {
     pageId: number;
     pageName: string;
     pagePath:string;
-    // Add any other properties needed
+  
   }
   
   export interface PagesResult {
@@ -21,4 +21,4 @@ export interface Page {
     responseMessage: string | null;
   }
   
-  
+ 

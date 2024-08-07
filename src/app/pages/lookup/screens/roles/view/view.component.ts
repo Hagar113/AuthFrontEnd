@@ -1,117 +1,9 @@
-// import { Component, OnInit } from '@angular/core';
-// import { Router } from '@angular/router';
-// import { LookupService } from '../../../service/lookup.service';
-// import { Role, RoleResponse } from '../../../models/roles/role-response';
-// import Swal from 'sweetalert2';
-
-// @Component({
-//   selector: 'app-view',
-//   templateUrl: './view.component.html',
-//   styleUrls: ['./view.component.css'],
-// })
-// export class ViewComponent implements OnInit {
-//   roles: Role[] = [];
-//   pageName: string = 'roleView';
-//   columns = [
-//     { key: 'displayId', title: 'Id' },
-//     { key: 'name', title: 'Name' },
-//     { key: 'roleCode', title: 'Role Code' },
-//   ];
-
-//   actions = [
-//     {
-//       key: 'edit',
-//       title: 'Edit',
-//       handler: (rowData: any) => {
-//         if (rowData && rowData.id) {
-//           this.editRole(rowData.id);
-//         } else {
-//           console.error('Invalid rowData for edit:', rowData);
-//         }
-//       },
-//     },
-//     {
-//       key: 'delete',
-//       title: 'Delete',
-//       handler: (rowData: any) => {
-//         if (rowData && rowData.id) {
-//           this.confirmDeleteRole(rowData.id);
-//         } else {
-//           console.error('Invalid rowData for delete:', rowData);
-//         }
-//       },
-//     },
-//   ];
-
-//   constructor(private lookupService: LookupService, private router: Router) {}
-
-//   ngOnInit(): void {
-//     this.getRoles();
-//   }
-
-//   getRoles(): void {
-//     this.lookupService.getAllRoles().subscribe({
-//       next: (response: RoleResponse) => {
-//         if (response.success) {
-//           const roles = Array.isArray(response.result) ? response.result : [response.result];
-//           this.roles = roles.map((role, index) => ({
-//             ...role,
-//             displayId: index + 1,
-//           }));
-//           console.log('Roles fetched successfully:', this.roles);
-//         } else {
-//           console.error('Failed to fetch roles', response.responseMessage);
-//         }
-//       },
-//       error: (err) => {
-//         console.error('Failed to fetch roles', err.message);
-//         console.error('Full error details:', err);
-//       },
-//     });
-//   }
-
-//   confirmDeleteRole(roleId: number): void {
-//     Swal.fire({
-//       title: 'Are you sure?',
-//       text: 'You won\'t be able to revert this!',
-//       icon: 'warning',
-//       showCancelButton: true,
-//       confirmButtonText: 'Yes, delete it!',
-//       cancelButtonText: 'No, cancel!',
-//     }).then((result) => {
-//       if (result.isConfirmed) {
-//         this.deleteRole(roleId);
-//       }
-//     });
-//   }
-
-//   deleteRole(roleId: number): void {
-//     this.lookupService.deleteRole(roleId).subscribe({
-//       next: () => {
-//         Swal.fire('Deleted!', 'Role has been deleted.', 'success');
-//         this.getRoles(); // Refresh the list after deletion
-//       },
-//       error: (err) => {
-//         Swal.fire('Failed!', 'Failed to delete role.', 'error');
-//         console.error('Failed to delete role', err);
-//       },
-//     });
-//   }
-
-//   editRole(roleId: number): void {
-//     this.router.navigate(['pages/lookup/roleForm', roleId]);
-//   }
-
-//   addRole(): void {
-//     this.router.navigate(['pages/lookup/roleForm', 0]);
-//   }
-// }
-/////////////////////////////////////////////////////////////////////////////
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LookupService } from '../../../service/lookup.service';
 import { Role, RoleResponse } from '../../../models/roles/role-response';
 import Swal from 'sweetalert2';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-view',
@@ -121,41 +13,24 @@ import Swal from 'sweetalert2';
 export class ViewComponent implements OnInit {
   roles: Role[] = [];
   pageName: string = 'roleView';
+
   columns = [
-    { key: 'displayId', title: 'Id' },
-    { key: 'name', title: 'Name' },
-    { key: 'roleCode', title: 'Role Code' },
+    { key: 'displayId', title: '' },
+    { key: 'name', title: '' },
+    { key: 'roleCode', title: '' },
+   
   ];
 
-  // actions = [
-  //   {
-  //     key: 'edit',
-  //     title: 'Edit',
-  //     handler: (rowData: any) => {
-  //       if (rowData && rowData.id) {
-  //         this.editRole(rowData.id);
-  //       } else {
-  //         console.error('Invalid rowData for edit:', rowData);
-  //       }
-  //     },
-  //   },
-  //   {
-  //     key: 'delete',
-  //     title: 'Delete',
-  //     handler: (rowData: any) => {
-  //       if (rowData && rowData.id) {
-  //         this.confirmDeleteRole(rowData.id);
-  //       } else {
-  //         console.error('Invalid rowData for delete:', rowData);
-  //       }
-  //     },
-  //   },
-  // ];
 
-  constructor(private lookupService: LookupService, private router: Router) {}
+  constructor(
+    private lookupService: LookupService,
+    private router: Router,
+    private translate: TranslateService
+  ) {}
 
   ngOnInit(): void {
     this.getRoles();
+    this.setTranslations();
   }
 
   getRoles(): void {
@@ -179,14 +54,25 @@ export class ViewComponent implements OnInit {
     });
   }
 
+  setTranslations(): void {
+    this.translate.get(['Id', 'Name', 'Role Code', 'Edit', 'Delete', 'Add', 'Actions']).subscribe(translations => {
+      this.columns[0].title = translations['Id'];
+      this.columns[1].title = translations['Name'];
+      this.columns[2].title = translations['Role Code'];
+    
+
+      
+    });
+  }
+
   confirmDeleteRole(roleId: number): void {
     Swal.fire({
-      title: 'Are you sure?',
-      text: 'You won\'t be able to revert this!',
+      title: this.translate.instant('Are you sure?'),
+      text: this.translate.instant('You won\'t be able to revert this!'),
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'No, cancel!',
+      confirmButtonText: this.translate.instant('Yes, delete it!'),
+      cancelButtonText: this.translate.instant('No, cancel!'),
     }).then((result) => {
       if (result.isConfirmed) {
         this.deleteRole(roleId);
@@ -197,11 +83,11 @@ export class ViewComponent implements OnInit {
   deleteRole(roleId: number): void {
     this.lookupService.deleteRole(roleId).subscribe({
       next: () => {
-        Swal.fire('Deleted!', 'Role has been deleted.', 'success');
+        Swal.fire(this.translate.instant('Deleted!'), this.translate.instant('Role has been deleted.'), 'success');
         this.getRoles(); // Refresh the list after deletion
       },
       error: (err) => {
-        Swal.fire('Failed!', 'Failed to delete role.', 'error');
+        Swal.fire(this.translate.instant('Failed!'), this.translate.instant('Failed to delete role.'), 'error');
         console.error('Failed to delete role', err);
       },
     });

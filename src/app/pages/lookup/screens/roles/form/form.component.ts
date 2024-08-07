@@ -57,19 +57,23 @@ export class FormComponent implements OnInit {
   loadPages(): void {
     this.lookupService.getAllPages().subscribe({
       next: (response: PagesResponse) => {
-        if (response.success && response.result && Array.isArray(response.result.pages)) {
-          const pages: Page[] = response.result.pages;
+        if (response.success && response.result && Array.isArray(response.result)) {
+          const pages: Page[] = response.result;
+          console.log(pages);
           this.dropdownOptions = pages.map((page: Page) => ({
-            value: page.pageId.toString(), // Ensure you use the correct property
+            value: page.pageId.toString(), 
             label: page.pageName
           }));
         } else {
+          console.log(response);
           Swal.fire('Error', 'Failed to load pages', 'error');
+         console.log((response.result)) ;
         }
       },
       error: (err: any) => {
         console.error('Failed to load pages', err);
         Swal.fire('Error', 'Failed to load pages', 'error');
+      
       },
     });
   }

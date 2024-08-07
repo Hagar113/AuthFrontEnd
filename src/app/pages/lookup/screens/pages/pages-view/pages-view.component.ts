@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { LookupService } from '../../../service/lookup.service';
 import Swal from 'sweetalert2';
 import { PagesResponse, Page } from '../../../models/pages/page-response';
+import { TranslateService } from '@ngx-translate/core'; // استيراد خدمة الترجمة
 
 @Component({
   selector: 'app-pages-view',
@@ -17,10 +18,15 @@ export class PagesViewComponent implements OnInit {
     { key: 'name', title: 'Name' },
   ];
 
-  constructor(private lookupService: LookupService, private router: Router) {}
+  constructor(
+    private lookupService: LookupService, 
+    private router: Router,
+    private translate: TranslateService // حقن خدمة الترجمة
+  ) {}
 
   ngOnInit(): void {
     this.getPages();
+    this.loadTranslations(); // تحميل الترجمة عند تهيئة المكون
   }
 
   getPages(): void {
@@ -43,15 +49,23 @@ export class PagesViewComponent implements OnInit {
     });
   }
   
+  loadTranslations(): void {
+    this.translate.get(['Id', 'Name']).subscribe(translations => {
+      this.columns = [
+        { key: 'displayId', title: translations['Id'] },
+        { key: 'name', title: translations['Name'] },
+      ];
+    });
+  }
 
   confirmDeletePage(pageId: number): void {
     Swal.fire({
-      title: 'Are you sure?',
-      text: 'You won\'t be able to revert this!',
+      title: this.translate.instant('Are you sure?'),
+      text: this.translate.instant('You won\'t be able to revert this!'),
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'No, cancel!',
+      confirmButtonText: this.translate.instant('Yes, delete it!'),
+      cancelButtonText: this.translate.instant('No, cancel!'),
     }).then((result) => {
       if (result.isConfirmed) {
         this.deletePage(pageId);
@@ -62,11 +76,11 @@ export class PagesViewComponent implements OnInit {
   deletePage(pageId: number): void {
     this.lookupService.deletePage(pageId).subscribe({
       next: () => {
-        Swal.fire('Deleted!', 'Page has been deleted.', 'success');
+        Swal.fire(this.translate.instant('Deleted!'), this.translate.instant('Page has been deleted.'), 'success');
         this.getPages(); // Refresh the list after deletion
       },
       error: (err) => {
-        Swal.fire('Failed!', 'Failed to delete page.', 'error');
+        Swal.fire(this.translate.instant('Failed!'), this.translate.instant('Failed to delete page.'), 'error');
         console.error('Failed to delete page', err);
       },
     });

@@ -4,6 +4,7 @@ import { AuthServiceService } from '../Auth Service/auth-service.service';
 import { Router } from '@angular/router';
 import ValidateForm from '../helpers/ValidateForm';
 import { RoleResponse } from '../models/role-response';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-signup',
@@ -49,7 +50,7 @@ export class SignupComponent implements OnInit {
           console.error('Failed to retrieve roles:', response.responseMessage);
         }
       },
-      error: (err:any) => {
+      error: (err: any) => {
         console.error('Error fetching roles', err);
       }
     });
@@ -73,61 +74,6 @@ export class SignupComponent implements OnInit {
     }
   }
 
-  // onSignup() {
-  //   if (this.signUpForm.valid) {
-  //     // Additional validation for dateOfBirth and age
-  //     const dob = new Date(this.signUpForm.value.dateOfBirth);
-  //     const today = new Date();
-  //     let calculatedAge = today.getFullYear() - dob.getFullYear();
-  //     if (dob > new Date(today.setFullYear(today.getFullYear() - calculatedAge))) {
-  //       calculatedAge--;
-  //     }
-  
-  //     if (this.signUpForm.value.age !== calculatedAge) {
-  //       alert("Age does not match the date of birth.");
-  //       return;
-  //     }
-
-  //     // Update role validation based on RoleId
-  //     const selectedRole = this.roles.find(role => role.id == this.signUpForm.value.RoleId);
-  //     if (!selectedRole) {
-  //       alert("Invalid role selected.");
-     
-  //       return;
-  //     }
-  
-  //     if (selectedRole.code === 'STUDENT_CODE' && (calculatedAge < 14 || calculatedAge > 25)) {
-  //       alert("Invalid age for student.");
-  //       return;
-  //     }
-  
-  //     if (selectedRole.code === 'TEACHER_CODE' && (calculatedAge < 25 || calculatedAge > 60)) {
-  //       alert("Invalid age for teacher.");
-  //       return;
-  //     }
-  
-  //     const formData = {
-  //       data: this.signUpForm.value  // Wrap form data in "data" object
-  //     };
-  
-  //     //console.log('Payload:', formData);  // Log the payload for debugging
-  //     console.log(this.signUpForm.value);
-  //     this.auth.signup(formData).subscribe({
-  //       next: (res:any) => {
-  //         console.log('Response:', res);
-  //         alert(res.message || 'Sign Up Successful');
-  //         this.redirectBasedOnRole(this.signUpForm.value.RoleId);
-  //       },
-  //       error: (err:any) => {
-  //         alert(err.error.message || 'An error occurred during sign up');
-  //         console.log(JSON.stringify(formData));
-  //       }
-  //     });
-  //   } else {
-  //     ValidateForm.validateAllFormFileds(this.signUpForm);
-  //     alert("Please fill in all required fields correctly.");
-  //   }
-  // }
   onSignup() {
     if (this.signUpForm.valid) {
       // Additional validation for dateOfBirth and age
@@ -137,52 +83,81 @@ export class SignupComponent implements OnInit {
       if (dob > new Date(today.setFullYear(today.getFullYear() - calculatedAge))) {
         calculatedAge--;
       }
-  
+
       if (this.signUpForm.value.age !== calculatedAge) {
-        alert("Age does not match the date of birth.");
+        Swal.fire({
+          icon: 'error',
+          title: 'Age Mismatch',
+          text: 'Age does not match the date of birth.',
+        });
         return;
       }
-  
+
       // Update role validation based on RoleId
       const selectedRole = this.roles.find(role => role.id == this.signUpForm.value.RoleId);
       if (!selectedRole) {
-        alert("Invalid role selected.");
+        Swal.fire({
+          icon: 'error',
+          title: 'Invalid Role',
+          text: 'Invalid role selected.',
+        });
         return;
       }
-  
+
       if (selectedRole.code === 'STUDENT_CODE' && (calculatedAge < 14 || calculatedAge > 25)) {
-        alert("Invalid age for student.");
+        Swal.fire({
+          icon: 'error',
+          title: 'Invalid Age for Student',
+          text: 'Invalid age for student.',
+        });
         return;
       }
-  
+
       if (selectedRole.code === 'TEACHER_CODE' && (calculatedAge < 25 || calculatedAge > 60)) {
-        alert("Invalid age for teacher.");
+        Swal.fire({
+          icon: 'error',
+          title: 'Invalid Age for Teacher',
+          text: 'Invalid age for teacher.',
+        });
         return;
       }
-  
+
       const formData = {
         data: this.signUpForm.value  // Wrap form data in "data" object
       };
-  
+
       // Log the payload for debugging
       console.log('Payload:', formData);
       this.auth.signup(formData).subscribe({
-        next: (res:any) => {
+        next: (res: any) => {
           console.log('Response:', res);
-          alert(res.message || 'Sign Up Successful');
-          this.router.navigate(['/auth/login']); // Redirect to login page
+          Swal.fire({
+            icon: 'success',
+            title: 'Sign Up Successful',
+            text: res.message || 'Sign Up Successful',
+          }).then(() => {
+            this.router.navigate(['/auth/login']); // Redirect to login page
+          });
         },
-        error: (err:any) => {
-          alert(err.error.message || 'An error occurred during sign up');
+        error: (err: any) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Sign Up Error',
+            text: err.error.message || 'An error occurred during sign up',
+          });
           console.log(JSON.stringify(formData));
         }
       });
     } else {
       ValidateForm.validateAllFormFileds(this.signUpForm);
-      alert("Please fill in all required fields correctly.");
+      Swal.fire({
+        icon: 'warning',
+        title: 'Validation Warning',
+        text: 'Please fill in all required fields correctly.',
+      });
     }
   }
-  
+
   private redirectBasedOnRole(roleId: string) {
     const role = this.roles.find(role => role.id === roleId);
     switch (role?.code) {
@@ -198,4 +173,3 @@ export class SignupComponent implements OnInit {
     }
   }
 }
-

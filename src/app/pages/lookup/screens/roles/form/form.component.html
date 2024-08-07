@@ -4,10 +4,14 @@
       <!-- Tabs -->
       <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
-          <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Role Info</a>
+          <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">
+            {{ 'roleInfoTab' | translate }}
+          </a>
         </li>
         <li class="nav-item" role="presentation">
-          <a class="nav-link" id="dropdown-tab" data-bs-toggle="tab" href="#dropdown" role="tab" aria-controls="dropdown" aria-selected="false">Select Pages</a>
+          <a class="nav-link" id="dropdown-tab" data-bs-toggle="tab" href="#dropdown" role="tab" aria-controls="dropdown" aria-selected="false">
+            {{ 'selectPagesTab' | translate }}
+          </a>
         </li>
       </ul>
       <div class="tab-content" id="myTabContent">
@@ -16,21 +20,33 @@
           <form [formGroup]="roleForm">
             <div class="row">
               <div class="col-md-6">
-                <label for="name">Role Name: <span class="text-danger">*</span></label>
+                <label for="name">
+                  {{ 'roleName' | translate }}: <span class="text-danger">*</span>
+                </label>
                 <input type="text" id="name" formControlName="name" class="form-control"
                   [class.is-invalid]="name?.invalid && (name?.dirty || name?.touched)">
                 <div>
-                  <small class="text-danger" *ngIf="name?.hasError('required') && (name?.dirty || name?.touched)">Role name is required</small>
-                  <small class="text-danger" *ngIf="name?.hasError('minlength') && (name?.dirty || name?.touched)">Role name should be at least 3 characters</small>
+                  <small class="text-danger" *ngIf="name?.hasError('required') && (name?.dirty || name?.touched)">
+                    {{ 'roleNameRequired' | translate }}
+                  </small>
+                  <small class="text-danger" *ngIf="name?.hasError('minlength') && (name?.dirty || name?.touched)">
+                    {{ 'roleNameMinlength' | translate }}
+                  </small>
                 </div>
               </div>
               <div class="col-md-6">
-                <label for="roleCode">Role Code: <span class="text-danger">*</span></label>
+                <label for="roleCode">
+                  {{ 'roleCode' | translate }}: <span class="text-danger">*</span>
+                </label>
                 <input type="text" id="roleCode" formControlName="roleCode" class="form-control"
                   [class.is-invalid]="roleCode?.invalid && (roleCode?.dirty || roleCode?.touched)">
                 <div>
-                  <small class="text-danger" *ngIf="roleCode?.hasError('required') && (roleCode?.dirty || roleCode?.touched)">Role code is required</small>
-                  <small class="text-danger" *ngIf="roleCode?.hasError('pattern') && (roleCode?.dirty || roleCode?.touched)">Role code should be 3-10 uppercase alphanumeric characters</small>
+                  <small class="text-danger" *ngIf="roleCode?.hasError('required') && (roleCode?.dirty || roleCode?.touched)">
+                    {{ 'roleCodeRequired' | translate }}
+                  </small>
+                  <small class="text-danger" *ngIf="roleCode?.hasError('pattern') && (roleCode?.dirty || roleCode?.touched)">
+                    {{ 'roleCodePattern' | translate }}
+                  </small>
                 </div>
               </div>
               <div class="row">
@@ -44,12 +60,18 @@
           <form [formGroup]="roleForm">
             <div class="row">
               <div class="col-md-12">
-                <label for="dropdown">Select Pages: <span class="text-danger">*</span></label>
+                <label for="dropdown">
+                  {{ 'selectPages' | translate }}: <span class="text-danger">*</span>
+                </label>
                 <select id="dropdown" formControlName="dropdown" class="form-control" multiple>
-                  <option *ngFor="let option of dropdownOptions" [value]="option.value">{{ option.label }}</option>
+                  <option *ngFor="let option of dropdownOptions" [value]="option.value">
+                    {{ option.label | translate }}
+                  </option>
                 </select>
                 <div>
-                  <small class="text-danger" *ngIf="dropdown?.hasError('required') && (dropdown?.dirty || dropdown?.touched)">Selection is required</small>
+                  <small class="text-danger" *ngIf="dropdown?.hasError('required') && (dropdown?.dirty || dropdown?.touched)">
+                    {{ 'selectionRequired' | translate }}
+                  </small>
                 </div>
               </div>
             </div>
@@ -58,8 +80,12 @@
       </div>
       <div class="row mt-3">
         <div class="col-md-12 text-end">
-          <button type="button" class="btn btn-primary m-2" (click)="save()" translate>Save</button>
-          <button type="button" class="btn btn-danger m-2" (click)="cancel()" translate>Cancel</button>
+          <button type="button" class="btn btn-primary m-2" (click)="save()">
+            {{ 'save' | translate }}
+          </button>
+          <button type="button" class="btn btn-danger m-2" (click)="cancel()">
+            {{ 'cancel' | translate }}
+          </button>
         </div>
       </div>
     </div>

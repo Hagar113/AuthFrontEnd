@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2'; // تأكد من استيراد SweetAlert2
 import { AuthServiceService } from '../Auth Service/auth-service.service';
 import { LoginResponse } from '../models/login-response';
 import ValidateForm from '../helpers/ValidateForm';
-import { Page, PagesResponse } from 'src/app/pages/lookup/models/pages/page-response';
-import { PageDto } from '../models/page-dto';
-import { mapPageToPageDto } from '../helpers/page-mapper';
+import { PagesResponse } from 'src/app/pages/lookup/models/pages/page-response';
 
 @Component({
   selector: 'app-login',
@@ -87,7 +86,11 @@ export class LoginComponent implements OnInit {
             this.fetchPagesAndStore(res.result.userDto.id, res.result.userDto.role.id);
           }
 
-          alert(res.responseMessage || 'Login successful');
+          Swal.fire({
+            icon: 'success',
+            title: res.responseMessage || 'Login successful',
+            confirmButtonText: 'OK'
+          });
 
           if (this.loginForm.value.rememberMe) {
             localStorage.setItem('formData', JSON.stringify(formData));
@@ -100,11 +103,19 @@ export class LoginComponent implements OnInit {
         },
         error: (err: any) => {
           console.error('Error:', err);
-          alert(err.error.message || 'An error occurred during login');
+          Swal.fire({
+            icon: 'error',
+            title: err.error.message || 'An error occurred during login',
+            confirmButtonText: 'OK'
+          });
         },
       });
     } else {
-      alert('Please fill in all required fields correctly.');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Please fill in all required fields correctly.',
+        confirmButtonText: 'OK'
+      });
       ValidateForm.validateAllFormFileds(this.loginForm);
     }
   }
@@ -114,18 +125,16 @@ export class LoginComponent implements OnInit {
       userId: userId,
       roleId: roleId
     };
-  
+
     this.auth.validateUserRole(request).subscribe({
       next: (res: PagesResponse) => {
         if (res.success && res.result && res.result.pages && Array.isArray(res.result.pages)) {
-      
           const pagesWithPaths = res.result.pages.map(page => ({
             pageId: page.pageId,
             pageName: page.pageName,
-            pagePath: page.pagePath || '' 
+            pagePath: page.pagePath || ''
           }));
-  
-        
+
           localStorage.setItem('userPages', JSON.stringify(pagesWithPaths));
         } else {
           console.error('Pages data is missing or invalid', res);
@@ -136,5 +145,4 @@ export class LoginComponent implements OnInit {
       }
     });
   }
-  
-}  
+}

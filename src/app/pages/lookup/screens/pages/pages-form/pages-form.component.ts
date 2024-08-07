@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-
-
 import { BaseRequestHeader } from 'src/app/shared/models/base-request-header';
 import { TranslateService } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
@@ -58,12 +56,20 @@ export class PagesFormComponent implements OnInit {
         if (response.success && response.result) {
           this.pageForm.patchValue(response.result);
         } else {
-          Swal.fire('Error', 'Page not found', 'error');
+          Swal.fire({
+            icon: 'error',
+            title: this.translate.instant('Error'),
+            text: this.translate.instant('Page not found'),
+          });
         }
       },
       error: (err: any) => {
         console.error('Failed to load page', err);
-        Swal.fire('Error', 'Failed to load page', 'error');
+        Swal.fire({
+          icon: 'error',
+          title: this.translate.instant('Error'),
+          text: this.translate.instant('Failed to load page'),
+        });
       },
     });
   }
@@ -77,42 +83,50 @@ export class PagesFormComponent implements OnInit {
 
       const requestPayload: BaseRequestHeader = {
         userId: 0,
-        languageCode: 'en',
+        languageCode: this.currentLang,
         data: savePageRequest,
       };
 
       this.lookupService.savePage(requestPayload).subscribe({
         next: () => {
-          Swal.fire(
-            'Success',
-            this.pageForm.value.id
-              ? 'Page updated successfully'
-              : 'Page created successfully',
-            'success'
-          );
+          Swal.fire({
+            icon: 'success',
+            title: this.translate.instant('Success'),
+            text: this.pageForm.value.id
+              ? this.translate.instant('Page updated successfully')
+              : this.translate.instant('Page created successfully'),
+          });
           this.pageForm.reset();
           this.router.navigate(['pages/lookup/pageForm', 0]);
         },
         error: (err: any) => {
           console.error('Failed to save page', err);
-          Swal.fire('Error', 'Failed to save page. Please try again later.', 'error');
+          Swal.fire({
+            icon: 'error',
+            title: this.translate.instant('Error'),
+            text: this.translate.instant('Failed to save page. Please try again later.'),
+          });
         },
       });
     } else {
-      Swal.fire('Error', 'Please correct the errors in the form.', 'error');
+      Swal.fire({
+        icon: 'error',
+        title: this.translate.instant('Error'),
+        text: this.translate.instant('Please correct the errors in the form.'),
+      });
     }
   }
 
   cancel(): void {
     Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
+      title: this.translate.instant('Are you sure?'),
+      text: this.translate.instant("You won't be able to revert this!"),
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, cancel it!',
-      cancelButtonText: 'No, keep it'
+      confirmButtonText: this.translate.instant('Yes, cancel it!'),
+      cancelButtonText: this.translate.instant('No, keep it'),
     }).then((result) => {
       if (result.isConfirmed) {
         this.router.navigate(['/pages/lookup/pages']);

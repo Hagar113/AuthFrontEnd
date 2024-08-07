@@ -1,23 +1,24 @@
 <div class="container">
-    <div class="row">
-      <div class="col-12">
-        <h2 class="text-center">Get Pages</h2>
-      </div>
-    </div>
-    <div class="row text-end">
-      <div class="col-md-12">
-        <button type="button" class="btn btn-primary" (click)="addPage()">Add</button>
-      </div>
-    </div>
-    <div class="row justify-content-center">
-      <div class="col-12">
-        <app-easy-table 
-          [inputData]="pages" 
-          [pageName]="pageName" 
-          [inputColumns]="columns" 
-          (actionTriggered)="onAction($event)">
-        </app-easy-table>
-      </div>
+  <div class="row">
+    <div class="col-12">
+      <h2 class="text-center">{{ 'Get Pages' | translate }}</h2>
     </div>
   </div>
-  
+  <div class="row text-end">
+    <div class="col-md-12">
+      <button type="button" class="btn btn-primary" (click)="addPage()">
+        {{ 'Add' | translate }}
+      </button>
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-12">
+      <app-easy-table 
+        [inputData]="pages" 
+        [pageName]="pageName" 
+        [inputColumns]="columns" 
+        (actionTriggered)="onAction($event)">
+      </app-easy-table>
+    </div>
+  </div>
+</div>
