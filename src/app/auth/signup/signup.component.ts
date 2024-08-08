@@ -83,7 +83,7 @@ export class SignupComponent implements OnInit {
       if (dob > new Date(today.setFullYear(today.getFullYear() - calculatedAge))) {
         calculatedAge--;
       }
-
+  
       if (this.signUpForm.value.age !== calculatedAge) {
         Swal.fire({
           icon: 'error',
@@ -92,7 +92,7 @@ export class SignupComponent implements OnInit {
         });
         return;
       }
-
+  
       // Update role validation based on RoleId
       const selectedRole = this.roles.find(role => role.id == this.signUpForm.value.RoleId);
       if (!selectedRole) {
@@ -103,8 +103,8 @@ export class SignupComponent implements OnInit {
         });
         return;
       }
-
-      if (selectedRole.code === 'STUDENT_CODE' && (calculatedAge < 14 || calculatedAge > 25)) {
+  
+      if (selectedRole.code === 'STUDENT' && (calculatedAge < 14 || calculatedAge > 25)) {
         Swal.fire({
           icon: 'error',
           title: 'Invalid Age for Student',
@@ -112,8 +112,8 @@ export class SignupComponent implements OnInit {
         });
         return;
       }
-
-      if (selectedRole.code === 'TEACHER_CODE' && (calculatedAge < 25 || calculatedAge > 60)) {
+  
+      if (selectedRole.code === 'TEACHER' && (calculatedAge < 25 || calculatedAge > 60)) {
         Swal.fire({
           icon: 'error',
           title: 'Invalid Age for Teacher',
@@ -121,11 +121,20 @@ export class SignupComponent implements OnInit {
         });
         return;
       }
-
+  
+      if (selectedRole.code === 'ADMIN' && (calculatedAge < 25 || calculatedAge > 60)) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Invalid Age for Admin',
+          text: 'Invalid age for admin.',
+        });
+        return;
+      }
+  
       const formData = {
         data: this.signUpForm.value  // Wrap form data in "data" object
       };
-
+  
       // Log the payload for debugging
       console.log('Payload:', formData);
       this.auth.signup(formData).subscribe({
@@ -157,19 +166,8 @@ export class SignupComponent implements OnInit {
       });
     }
   }
-
-  private redirectBasedOnRole(roleId: string) {
-    const role = this.roles.find(role => role.id === roleId);
-    switch (role?.code) {
-      case 'STUDENT_CODE':
-        this.router.navigate(['/pages/lookup/student']);
-        break;
-      case 'TEACHER_CODE':
-        this.router.navigate(['/teacher']);
-        break;
-      default:
-        this.router.navigate(['/login']);
-        break;
-    }
-  }
+  
+ 
+  
+  
 }

@@ -11,6 +11,7 @@ import { HomeComponent } from './screens/home/home/home.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { PagesViewComponent } from './screens/pages/pages-view/pages-view.component';
 import { PagesFormComponent } from './screens/pages/pages-form/pages-form.component';
+import { UserViewComponent } from './screens/user-view/user-view.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { PagesFormComponent } from './screens/pages/pages-form/pages-form.compon
     HomeComponent,
     PagesViewComponent,
     PagesFormComponent,
+    UserViewComponent,
   ],
   imports: [
     CommonModule,

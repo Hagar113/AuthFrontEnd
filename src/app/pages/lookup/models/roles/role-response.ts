@@ -3,7 +3,7 @@ export interface Role {
     id: number;
     name: string;
     roleCode: string;
-    dropdown: string[];
+    SelectedPageIds: number[];
   }
   export interface RoleResponse {
     success: boolean; 

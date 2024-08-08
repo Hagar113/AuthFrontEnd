@@ -60,16 +60,16 @@
           <form [formGroup]="roleForm">
             <div class="row">
               <div class="col-md-12">
-                <label for="dropdown">
+                <label for="SelectedPageIds">
                   {{ 'selectPages' | translate }}: <span class="text-danger">*</span>
                 </label>
-                <select id="dropdown" formControlName="dropdown" class="form-control" multiple>
+                <select id="SelectedPageIds" formControlName="SelectedPageIds" class="form-control" multiple>
                   <option *ngFor="let option of dropdownOptions" [value]="option.value">
                     {{ option.label | translate }}
                   </option>
                 </select>
                 <div>
-                  <small class="text-danger" *ngIf="dropdown?.hasError('required') && (dropdown?.dirty || dropdown?.touched)">
+                  <small class="text-danger" *ngIf="SelectedPageIds?.hasError('required') && (SelectedPageIds?.dirty || SelectedPageIds?.touched)">
                     {{ 'selectionRequired' | translate }}
                   </small>
                 </div>
