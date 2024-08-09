@@ -23,8 +23,7 @@ export class UserViewComponent implements OnInit {
     { key: 'age', title: this.translate.instant('Age') },
     { key: 'academicYear', title: this.translate.instant('Academic Year') },
     { key: 'dateOfBirth', title: this.translate.instant('Date of Birth') },
-
-    { key: 'roleName', title: this.translate.instant('Role') },
+    { key: 'roleCode', title: this.translate.instant('Role') },
     
   ];
 
@@ -51,7 +50,7 @@ export class UserViewComponent implements OnInit {
           this.users = users.map((user, index) => ({
             ...user,
             displayId: index + 1,
-            roleName: this.getRoleName(user.roleId),
+            //roleName: this.getRoleName(user.roleCode),
             // dateOfBirth: user.dateOfBirth // Include Date of Birth in the mapped user
           }));
           console.log('Users fetched successfully:', this.users);

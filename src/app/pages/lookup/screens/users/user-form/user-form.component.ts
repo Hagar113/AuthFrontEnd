@@ -122,7 +122,7 @@ export class UserFormComponent implements OnInit {
     });
 
     if (this.userForm.valid) {
-        // Existing save logic here
+        // Preparing the SaveUserRequest object
         const saveUserRequest: SaveUserRequest = {
             id: this.userForm.value.id,
             userName: this.userForm.value.userName,
@@ -136,6 +136,10 @@ export class UserFormComponent implements OnInit {
             roleId: this.userForm.value.role 
         };
 
+        // Log the data that will be sent
+        console.log('Saving user with data:', saveUserRequest);
+
+        // Call the service to save the user
         this.lookupService.saveUser(saveUserRequest).subscribe({
             next: () => {
                 Swal.fire({
@@ -166,6 +170,7 @@ export class UserFormComponent implements OnInit {
         });
     }
 }
+
 
   cancel(): void {
     Swal.fire({

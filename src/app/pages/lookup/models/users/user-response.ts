@@ -8,7 +8,8 @@ export interface UserResponse {
     password:string;
     AcadymicYear: string;
     dateOfBirth: Date;
-    roleId?: number; // Optional property
+    roleCode: string; // Optional property
+    
 }
 
 export interface UserResponseWrapper {

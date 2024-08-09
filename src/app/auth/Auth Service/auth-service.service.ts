@@ -40,20 +40,15 @@ export class AuthServiceService {
     return this.apiConfigService.post<PagesResponse>(`${this.endpoint}/validate-user-role`, request);
   }
 
-  // src/app/auth/Auth Service/auth-service.service.ts
-
-  storeUserData(roleId: string, pages: Page[]): void {
-    // Map Page to PageDto before storing
+  storeUserData(roleCode: string, pages: Page[]): void {
     const pageDtos: PageDto[] = pages.map(mapPageToPageDto);
     const dataToStore = {
-      roleId: roleId,
+      roleCode: roleCode,
       pages: pageDtos,
       isValid: pageDtos.length > 0
     };
     localStorage.setItem('userPages', JSON.stringify(dataToStore));
   }
-  
-  
 
   getUserPages(): any[] {
     const pagesJson = localStorage.getItem('userPages');

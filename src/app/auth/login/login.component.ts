@@ -64,62 +64,66 @@ export class LoginComponent implements OnInit {
 
   onLogin() {
     if (this.loginForm.valid) {
-      const formData = {
-        data: {
-          email_phone: this.loginForm.value.loginId,
-          password: this.loginForm.value.password,
-        },
-      };
+        const formData = {
+            data: {
+                email_phone: this.loginForm.value.loginId,
+                password: this.loginForm.value.password,
+            },
+        };
 
-      console.log('Request Payload:', formData);
+        console.log('Request Payload:', formData);
 
-      this.auth.login(formData).subscribe({
-        next: (res: LoginResponse) => {
-          console.log('Response:', res);
+        this.auth.login(formData).subscribe({
+            next: (res: LoginResponse) => {
+                console.log('Response:', res);
 
-          if (res.result && res.result.token) {
-            localStorage.setItem('token', res.result.token);
-          }
+                if (res.result && res.result.token) {
+                    localStorage.setItem('token', res.result.token);
+                }
 
-          if (res.result && res.result.userDto && res.result.userDto.role) {
-            localStorage.setItem('role', res.result.userDto.role.name);
-            this.fetchPagesAndStore(res.result.userDto.id, res.result.userDto.role.id);
-          }
+                if (res.result && res.result.userDto && res.result.userDto.role) {
+                    const roleCode = res.result.userDto.role.code; // جلب الـ roleCode
 
-          Swal.fire({
-            icon: 'success',
-            title: res.responseMessage || 'Login successful',
-            confirmButtonText: 'OK'
-          });
+                    localStorage.setItem('roleCode', roleCode); // تخزين الـ roleCode في الـ localStorage
 
-          if (this.loginForm.value.rememberMe) {
-            localStorage.setItem('formData', JSON.stringify(formData));
-            localStorage.setItem('rememberMe', 'true');
-          } else {
-            localStorage.setItem('rememberMe', 'false');
-          }
+                    this.fetchPagesAndStore(res.result.userDto.id, res.result.userDto.role.id); // جلب الصفحات بناءً على roleId
+                }
 
-          this.router.navigate(['pages/lookup/home']);
-        },
-        error: (err: any) => {
-          console.error('Error:', err);
-          Swal.fire({
-            icon: 'error',
-            title: err.error.message || 'An error occurred during login',
-            confirmButtonText: 'OK'
-          });
-        },
-      });
+                Swal.fire({
+                    icon: 'success',
+                    title: res.responseMessage || 'Login successful',
+                    confirmButtonText: 'OK'
+                });
+
+                if (this.loginForm.value.rememberMe) {
+                    localStorage.setItem('formData', JSON.stringify(formData));
+                    localStorage.setItem('rememberMe', 'true');
+                } else {
+                    localStorage.setItem('rememberMe', 'false');
+                }
+
+                this.router.navigate(['pages/lookup/home']);
+            },
+            error: (err: any) => {
+                console.error('Error:', err);
+                Swal.fire({
+                    icon: 'error',
+                    title: err.error.message || 'An error occurred during login',
+                    confirmButtonText: 'OK'
+                });
+            },
+        });
     } else {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Please fill in all required fields correctly.',
-        confirmButtonText: 'OK'
-      });
-      ValidateForm.validateAllFormFileds(this.loginForm);
+        Swal.fire({
+            icon: 'warning',
+            title: 'Please fill in all required fields correctly.',
+            confirmButtonText: 'OK'
+        });
+        ValidateForm.validateAllFormFileds(this.loginForm);
     }
-  }
+}
 
+  
   fetchPagesAndStore(userId: number, roleId: number) {
     const request = {
       userId: userId,
