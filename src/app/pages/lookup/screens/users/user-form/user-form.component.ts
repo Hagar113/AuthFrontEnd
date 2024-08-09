@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LookupService } from '../../../service/lookup.service';
 import { SaveUserRequest } from '../../../models/users/save-user-request';
 import { UserResponseWrapper } from '../../../models/users/user-response';
+import { GetAssignedRoles } from '../../../models/users/get-assigned-roles';
+
 import Swal from 'sweetalert2';
-import { RoleResponse } from 'src/app/auth/models/role-response';
-import { RolesResponse } from '../../../models/roles/get-all-roles-res';
+import { Roles } from '../../../models/roles/get-all-roles-res';
 
 @Component({
   selector: 'app-user-form',
@@ -16,7 +17,8 @@ import { RolesResponse } from '../../../models/roles/get-all-roles-res';
 export class UserFormComponent implements OnInit {
   userForm: FormGroup;
   id: number | null = null;
-  roles: { id: number, name: string }[] = [];
+  roles: GetAssignedRoles[] = [];
+  selectedRole: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -34,7 +36,7 @@ export class UserFormComponent implements OnInit {
       password: ['', [Validators.required, Validators.minLength(6)]],
       academicYear: ['', [Validators.required, Validators.pattern(/^\d{4}(-\d{4})?$/)]],
       dateOfBirth: ['', [Validators.required]],
-      role: [null, [Validators.required]] // Add the role form control
+      role: [null, [Validators.required]]
     });
   }
 
@@ -55,15 +57,41 @@ export class UserFormComponent implements OnInit {
       }
     });
 
-    this.loadRoles(); // Load roles when the component initializes
+    this.loadRoles();
   }
 
   loadUser(id: number): void {
     this.lookupService.getUserById(id).subscribe({
       next: (response: UserResponseWrapper) => {
-        if (response.success && response.result.length > 0) {
-          const user = response.result[0];
+        if (response.success && response.result) {
+          const user = response.result;
           this.userForm.patchValue(user);
+
+          // Load assigned role
+          this.lookupService.getAssignedRoles(user.id).subscribe({
+            next: (response: { success: boolean; result: Roles; responseMessage?: string }) => {
+              if (response.success) {
+                const role = response.result;
+                this.roles = [this.mapRoleToAssignedRole(role)]; // تحويل البيانات إلى GetAssignedRoles
+                this.selectedRole = role.code; // Set the selected role code
+                this.userForm.get('role')?.setValue(this.selectedRole);
+              } else {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Error',
+                  text: response.responseMessage || 'Failed to load assigned role'
+                });
+              }
+            },
+            error: (err: any) => {
+              console.error('Failed to load assigned role', err);
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Failed to load assigned role'
+              });
+            }
+          });
         } else {
           Swal.fire({
             icon: 'error',
@@ -85,13 +113,9 @@ export class UserFormComponent implements OnInit {
 
   loadRoles(): void {
     this.lookupService.getRoles().subscribe({
-      next: (response: RolesResponse) => {
+      next: (response: { success: boolean; result: Roles[]; responseMessage?: string }) => {
         if (response.success) {
-          // Convert the roles to match the expected type
-          this.roles = response.result.map(role => ({
-            id: +role.id, // Convert id from string to number
-            name: role.name
-          }));
+          this.roles = response.result.map(role => this.mapRoleToAssignedRole(role)); 
         } else {
           console.error('Failed to retrieve roles:', response.responseMessage);
           Swal.fire({
@@ -111,66 +135,47 @@ export class UserFormComponent implements OnInit {
       }
     });
   }
-  
-  save(): void {
-    // Check for errors in each form control
-    Object.keys(this.userForm.controls).forEach(key => {
-        const controlErrors: ValidationErrors | null = this.userForm.get(key)?.errors || null;
-        if (controlErrors != null) {
-            console.log('Key control: ' + key + ', Errors: ' + JSON.stringify(controlErrors));
-        }
-    });
 
-    if (this.userForm.valid) {
-        // Preparing the SaveUserRequest object
-        const saveUserRequest: SaveUserRequest = {
-            id: this.userForm.value.id,
-            userName: this.userForm.value.userName,
-            firstName: this.userForm.value.firstName,
-            email: this.userForm.value.email,
-            phone: this.userForm.value.phone,
-            age: this.userForm.value.age,
-            password: this.userForm.value.password,
-            academicYear: this.userForm.value.academicYear,
-            dateOfBirth: this.userForm.value.dateOfBirth,
-            roleId: this.userForm.value.role 
-        };
+  private mapRoleToAssignedRole(role: Roles): GetAssignedRoles {
+    return {
+      id: Number(role.id), 
+      code: role.code,
+      name: role.name
+    };
+  }
 
-        // Log the data that will be sent
-        console.log('Saving user with data:', saveUserRequest);
-
-        // Call the service to save the user
-        this.lookupService.saveUser(saveUserRequest).subscribe({
-            next: () => {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: this.userForm.value.id
-                        ? 'User updated successfully'
-                        : 'User created successfully'
-                });
-
-                this.userForm.reset();
-                this.router.navigate(['pages/lookup/userForm', 0]);
-            },
-            error: (err: any) => {
-                console.error('Failed to save user', err);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Failed to save user'
-                });
-            }
-        });
-    } else {
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Please correct the errors in the form.'
-        });
+  saveUser(): void {
+    if (this.userForm.invalid) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Invalid Form',
+        text: 'Please fill out the form correctly.'
+      });
+      return;
     }
-}
 
+    const userRequest: SaveUserRequest = this.userForm.value;
+
+    this.lookupService.saveUser(userRequest).subscribe({
+      next: () => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Saved',
+          text: 'User has been saved successfully'
+        }).then(() => {
+          this.router.navigate(['pages/lookup/userForm', 0]);
+        });
+      },
+      error: (err: any) => {
+        console.error('Failed to save user', err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to save user'
+        });
+      }
+    });
+  }
 
   cancel(): void {
     Swal.fire({

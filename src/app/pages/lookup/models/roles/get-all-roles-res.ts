@@ -1,6 +1,7 @@
 export interface Roles {
     id: string;  // Change this to `number` if required
     name: string;
+    code:string;
   }
   
   export interface RolesResponse {

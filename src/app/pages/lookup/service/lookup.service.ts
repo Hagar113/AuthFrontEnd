@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { tap, catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
-
+import { map } from 'rxjs/operators'; // استيراد map من rxjs
 
 import { Observable } from 'rxjs';
 
 import { Subject, SubjectResponse } from '../models/subjects/subject-response';
 
 import { SaveRoleRequest } from '../models/roles/save-role-request';
-import { RoleResponse } from '../models/roles/role-response';
+import { Role, RoleResponse } from '../models/roles/role-response';
 
 import { DeleteSubjectRequest } from '../models/subjects/delete-subject-request';
 import { ApiConfigService } from 'src/app/shared/shared service/api-config.service';
@@ -17,9 +17,10 @@ import { Page, PagesResponse } from '../models/pages/page-response';
 import { UserResponse, UserResponseWrapper } from '../models/users/user-response';
 import { SaveUserRequest } from '../models/users/save-user-request';
 import { RoleRrsDropdown } from '../models/users/role-rrs-dropdown';
-import { RolesResponse } from '../models/roles/get-all-roles-res';
+import { Roles, RolesResponse } from '../models/roles/get-all-roles-res';
 import { TeacherResponse } from '../models/teachers/teacher-response';
 import { RoleRequest } from '../models/roles/role-request';
+import { GetAssignedRoles } from '../models/users/get-assigned-roles';
 
 @Injectable({
   providedIn: 'root'
@@ -210,4 +211,21 @@ getAssignedPagesForRole(roleId: number): Observable<Page[]> {
 
   return this.apiConfigService.post<Page[]>(`${this.pagesEndpoint}/GetAssignedPages`, requestPayload);
 }
+
+
+getAssignedRoles(userId: number): Observable<{ success: boolean; result: Roles; responseMessage?: string }> {
+  const requestPayload: BaseRequestHeader = {
+    userId: userId,
+    languageCode: 'en',
+    data: JSON.stringify({ UserId: userId })
+  };
+
+  return this.apiConfigService.post<{ success: boolean; result: Roles; responseMessage?: string }>(
+    `${this.usersEndpoint}/GetAssignedRole`,
+    requestPayload
+  );
+}
+
+
+
 }

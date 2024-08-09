@@ -1,7 +1,7 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12 text-end">
-      <button type="button" class="btn btn-primary m-2" (click)="save()">
+      <button type="button" class="btn btn-primary m-2" (click)="saveUser()">
         {{ 'Save' | translate }}
       </button>
       <button type="button" class="btn btn-danger m-2" (click)="cancel()">
@@ -141,21 +141,23 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-md-6">
-            <label for="role">
-              {{ 'Role' | translate }}: <span class="text-danger">*</span>
-            </label>
-            <select id="role" formControlName="role" class="form-control"
-              [class.is-invalid]="userForm.get('role')?.invalid && (userForm.get('role')?.dirty || userForm.get('role')?.touched)">
-              <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
-            </select>
-            <div>
-              <small class="text-danger" *ngIf="userForm.get('role')?.hasError('required') && (userForm.get('role')?.dirty || userForm.get('role')?.touched)">
-                {{ 'Role is required' | translate }}
-              </small>
+            <div class="col-md-6">
+              <label for="role">
+                {{ 'Role' | translate }}: <span class="text-danger">*</span>
+              </label>
+              <select formControlName="role">
+                <option *ngFor="let role of roles" [value]="role.code">{{ role.name }}</option>
+              </select>
+          
+              <div>
+                <small class="text-danger" *ngIf="userForm.get('role')?.hasError('required') && (userForm.get('role')?.dirty || userForm.get('role')?.touched)">
+                  {{ 'Role is required' | translate }}
+                </small>
+              </div>
             </div>
           </div>
-        </div>
+          
+          
       </form>
     </div>
   </div>
