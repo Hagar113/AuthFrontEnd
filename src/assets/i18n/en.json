@@ -57,7 +57,19 @@
 
         "Academic year is required": "Academic year is required",
         "Academic year must be in the format YYYY or YYYY-YYYY": "Academic year must be in the format YYYY or YYYY-YYYY",
-      "Page Name":"Page Name"
+      "Page Name":"Page Name",
       
+  "Username": "Username",
+  
+  "Email": "Email",
+  "Phone": "Phone",
+  "Age": "Age",
+  "School Year": "School Year",
+  
+  "No, keep it": "No, keep it",
+  
+  "The user has been deleted.": "The user has been deleted.",
+  "Error": "Error",
+  "An error occurred while deleting the user.": "An error occurred while deleting the user."
   }
   

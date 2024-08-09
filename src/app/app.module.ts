@@ -17,6 +17,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AuthServiceService } from './auth/Auth Service/auth-service.service';
 import { AuthGuard } from './auth/guard/auth.guard';
 import { RouterModule } from '@angular/router';
+import { EasyTableComponent } from './shared/sharedComponent/easy-table/easy-table.component';
 //import { RouterModule } from '@angular/router';
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -32,7 +33,7 @@ export function createTranslateLoader(http: HttpClient) {
     HttpClientModule,
     ReactiveFormsModule,
     SharedModule,
-    PagesModule,
+    
     TranslateModule.forRoot({
       defaultLanguage: 'en',
       loader: {

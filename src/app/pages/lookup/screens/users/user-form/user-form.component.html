@@ -1,0 +1,162 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 text-end">
+      <button type="button" class="btn btn-primary m-2" (click)="save()">
+        {{ 'Save' | translate }}
+      </button>
+      <button type="button" class="btn btn-danger m-2" (click)="cancel()">
+        {{ 'Cancel' | translate }}
+      </button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <form [formGroup]="userForm">
+        <div class="row">
+          <!-- Existing fields -->
+          <div class="col-md-6">
+            <label for="userName">
+              {{ 'Username' | translate }}: <span class="text-danger">*</span>
+            </label>
+            <input type="text" id="userName" formControlName="userName" class="form-control"
+              [class.is-invalid]="userForm.get('userName')?.invalid && (userForm.get('userName')?.dirty || userForm.get('userName')?.touched)">
+            <div>
+              <small class="text-danger" *ngIf="userForm.get('userName')?.hasError('required') && (userForm.get('userName')?.dirty || userForm.get('userName')?.touched)">
+                {{ 'Username is required' | translate }}
+              </small>
+              <small class="text-danger" *ngIf="userForm.get('userName')?.hasError('minlength') && (userForm.get('userName')?.dirty || userForm.get('userName')?.touched)">
+                {{ 'Username should be at least 3 characters' | translate }}
+              </small>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="email">
+              {{ 'Email' | translate }}: <span class="text-danger">*</span>
+            </label>
+            <input type="email" id="email" formControlName="email" class="form-control"
+              [class.is-invalid]="userForm.get('email')?.invalid && (userForm.get('email')?.dirty || userForm.get('email')?.touched)">
+            <div>
+              <small class="text-danger" *ngIf="userForm.get('email')?.hasError('required') && (userForm.get('email')?.dirty || userForm.get('email')?.touched)">
+                {{ 'Email is required' | translate }}
+              </small>
+              <small class="text-danger" *ngIf="userForm.get('email')?.hasError('email') && (userForm.get('email')?.dirty || userForm.get('email')?.touched)">
+                {{ 'Invalid email format' | translate }}
+              </small>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <label for="phone">
+              {{ 'Phone' | translate }}: <span class="text-danger">*</span>
+            </label>
+            <input type="text" id="phone" formControlName="phone" class="form-control"
+              [class.is-invalid]="userForm.get('phone')?.invalid && (userForm.get('phone')?.dirty || userForm.get('phone')?.touched)">
+            <div>
+              <small class="text-danger" *ngIf="userForm.get('phone')?.hasError('required') && (userForm.get('phone')?.dirty || userForm.get('phone')?.touched)">
+                {{ 'Phone is required' | translate }}
+              </small>
+              <small class="text-danger" *ngIf="userForm.get('phone')?.hasError('pattern') && (userForm.get('phone')?.dirty || userForm.get('phone')?.touched)">
+                {{ 'Phone number must start with 010, 011, or 012 and be exactly 11 digits long' | translate }}
+              </small>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="age">
+              {{ 'Age' | translate }}: <span class="text-danger">*</span>
+            </label>
+            <input type="number" id="age" formControlName="age" class="form-control"
+              [class.is-invalid]="userForm.get('age')?.invalid && (userForm.get('age')?.dirty || userForm.get('age')?.touched)">
+            <div>
+              <small class="text-danger" *ngIf="userForm.get('age')?.hasError('required') && (userForm.get('age')?.dirty || userForm.get('age')?.touched)">
+                {{ 'Age is required' | translate }}
+              </small>
+              <small class="text-danger" *ngIf="userForm.get('age')?.hasError('min') && (userForm.get('age')?.dirty || userForm.get('age')?.touched)">
+                {{ 'Age must be a positive number' | translate }}
+              </small>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <label for="firstName">
+              {{ 'First Name' | translate }}: <span class="text-danger">*</span>
+            </label>
+            <input type="text" id="firstName" formControlName="firstName" class="form-control"
+              [class.is-invalid]="userForm.get('firstName')?.invalid && (userForm.get('firstName')?.dirty || userForm.get('firstName')?.touched)">
+            <div>
+              <small class="text-danger" *ngIf="userForm.get('firstName')?.hasError('required') && (userForm.get('firstName')?.dirty || userForm.get('firstName')?.touched)">
+                {{ 'First Name is required' | translate }}
+              </small>
+              <small class="text-danger" *ngIf="userForm.get('firstName')?.hasError('minlength') && (userForm.get('firstName')?.dirty || userForm.get('firstName')?.touched)">
+                {{ 'First Name should be at least 3 characters' | translate }}
+              </small>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="dateOfBirth">
+              {{ 'Date of Birth' | translate }}: <span class="text-danger">*</span>
+            </label>
+            <input type="date" id="dateOfBirth" formControlName="dateOfBirth" class="form-control"
+              [class.is-invalid]="userForm.get('dateOfBirth')?.invalid && (userForm.get('dateOfBirth')?.dirty || userForm.get('dateOfBirth')?.touched)">
+            <div>
+              <small class="text-danger" *ngIf="userForm.get('dateOfBirth')?.hasError('required') && (userForm.get('dateOfBirth')?.dirty || userForm.get('dateOfBirth')?.touched)">
+                {{ 'Date of Birth is required' | translate }}
+              </small>
+              <small class="text-danger" *ngIf="userForm.get('dateOfBirth')?.hasError('pattern') && (userForm.get('dateOfBirth')?.dirty || userForm.get('dateOfBirth')?.touched)">
+                {{ 'Invalid date format' | translate }}
+              </small>
+            </div>
+          </div>
+          
+          <div class="col-md-6">
+            <label for="password">
+              {{ 'Password' | translate }}: <span class="text-danger">*</span>
+            </label>
+            <input type="password" id="password" formControlName="password" class="form-control"
+              [class.is-invalid]="userForm.get('password')?.invalid && (userForm.get('password')?.dirty || userForm.get('password')?.touched)">
+            <div>
+              <small class="text-danger" *ngIf="userForm.get('password')?.hasError('required') && (userForm.get('password')?.dirty || userForm.get('password')?.touched)">
+                {{ 'Password is required' | translate }}
+              </small>
+              <small class="text-danger" *ngIf="userForm.get('password')?.hasError('minlength') && (userForm.get('password')?.dirty || userForm.get('password')?.touched)">
+                {{ 'Password should be at least 6 characters' | translate }}
+              </small>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="academicYear">
+              {{ 'Academic Year' | translate }}: <span class="text-danger">*</span>
+            </label>
+            <input type="text" id="academicYear" formControlName="academicYear" class="form-control"
+              [class.is-invalid]="userForm.get('academicYear')?.invalid && (userForm.get('academicYear')?.dirty || userForm.get('academicYear')?.touched)">
+            <div>
+              <small class="text-danger" *ngIf="userForm.get('academicYear')?.hasError('required') && (userForm.get('academicYear')?.dirty || userForm.get('academicYear')?.touched)">
+                {{ 'Academic Year is required' | translate }}
+              </small>
+              <small class="text-danger" *ngIf="userForm.get('academicYear')?.hasError('pattern') && (userForm.get('academicYear')?.dirty || userForm.get('academicYear')?.touched)">
+                {{ 'Academic Year must be in the format YYYY or YYYY-YYYY' | translate }}
+              </small>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <label for="role">
+              {{ 'Role' | translate }}: <span class="text-danger">*</span>
+            </label>
+            <select id="role" formControlName="role" class="form-control"
+              [class.is-invalid]="userForm.get('role')?.invalid && (userForm.get('role')?.dirty || userForm.get('role')?.touched)">
+              <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
+            </select>
+            <div>
+              <small class="text-danger" *ngIf="userForm.get('role')?.hasError('required') && (userForm.get('role')?.dirty || userForm.get('role')?.touched)">
+                {{ 'Role is required' | translate }}
+              </small>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

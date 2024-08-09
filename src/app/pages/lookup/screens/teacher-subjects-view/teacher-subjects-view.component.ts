@@ -1,0 +1,76 @@
+import { Component, OnInit } from '@angular/core';
+import { LookupService } from '../../service/lookup.service';
+import { Subject, SubjectResponse } from '../../models/subjects/subject-response';
+import { TeacherResponse } from '../../models/teachers/teacher-response';
+
+@Component({
+  selector: 'app-teacher-subjects-view',
+  templateUrl: './teacher-subjects-view.component.html',
+  styleUrls: ['./teacher-subjects-view.component.css']
+})
+export class TeacherSubjectsViewComponent implements OnInit {
+  subjects: Subject[] = [];
+  teachers: TeacherResponse[] = [];
+  selectedSubject: number | null = null;
+  selectedTeacher: number | null = null;
+
+  constructor(private lookupService: LookupService) {}
+
+  ngOnInit(): void {
+    this.getSubjects();
+    this.getTeachers();
+  }
+
+  getSubjects(): void {
+    this.lookupService.getAllSubjects().subscribe({
+      next: (response: SubjectResponse) => {
+        if (response.success) {
+          this.subjects = Array.isArray(response.result) ? response.result : [response.result];
+          console.log('Subjects fetched successfully:', this.subjects);
+        } else {
+          console.error('Failed to fetch subjects', response.responseMessage);
+        }
+      },
+      error: (err) => {
+        console.error('Failed to fetch subjects', err.message);
+      },
+    });
+  }
+
+  getTeachers(): void {
+    this.lookupService.getAllTeachers().subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.teachers = Array.isArray(response.result) ? response.result : [response.result];
+          console.log('Teachers fetched successfully:', this.teachers);
+        } else {
+          console.error('Failed to fetch teachers', response.responseMessage);
+        }
+      },
+      error: (err) => {
+        console.error('Failed to fetch teachers', err.message);
+      },
+    });
+  }
+
+  saveSelection(): void {
+    if (this.selectedTeacher && this.selectedSubject) {
+      this.lookupService.assignSubjectToTeacher(this.selectedTeacher, this.selectedSubject).subscribe({
+        next: (result: number) => {
+          if (result === 1) {
+            console.log('Subject assigned to teacher successfully');
+          } else if (result === -2) {
+            console.error('Teacher or subject not found');
+          } else {
+            console.error('An error occurred while assigning the subject');
+          }
+        },
+        error: (err) => {
+          console.error('Failed to assign subject to teacher', err.message);
+        },
+      });
+    } else {
+      console.error('Please select both teacher and subject');
+    }
+  }
+}

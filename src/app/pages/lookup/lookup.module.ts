@@ -11,7 +11,12 @@ import { HomeComponent } from './screens/home/home/home.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { PagesViewComponent } from './screens/pages/pages-view/pages-view.component';
 import { PagesFormComponent } from './screens/pages/pages-form/pages-form.component';
-import { UserViewComponent } from './screens/user-view/user-view.component';
+
+import { UserFormComponent } from './screens/users/user-form/user-form.component';
+import { UserViewComponent } from './screens/users/user-view/user-view.component';
+import { Erorr404Component } from './screens/erorr404/erorr404.component';
+import { TeacherSubjectsViewComponent } from './screens/teacher-subjects-view/teacher-subjects-view.component';
+
 
 @NgModule({
   declarations: [
@@ -23,6 +28,12 @@ import { UserViewComponent } from './screens/user-view/user-view.component';
     PagesViewComponent,
     PagesFormComponent,
     UserViewComponent,
+    UserFormComponent,
+    Erorr404Component,
+    TeacherSubjectsViewComponent,
+    
+    
+
   ],
   imports: [
     CommonModule,

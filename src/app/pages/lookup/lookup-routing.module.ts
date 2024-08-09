@@ -7,6 +7,9 @@ import { SubjectFormComponent } from './screens/subject/subject-form/subject-for
 import { HomeComponent } from './screens/home/home/home.component';
 import { PagesViewComponent } from './screens/pages/pages-view/pages-view.component';
 import { PagesFormComponent } from './screens/pages/pages-form/pages-form.component';
+import { UserViewComponent } from './screens/users/user-view/user-view.component';
+import { UserFormComponent } from './screens/users/user-form/user-form.component';
+import { TeacherSubjectsViewComponent } from './screens/teacher-subjects-view/teacher-subjects-view.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -16,7 +19,11 @@ const routes: Routes = [
   // { path: 'roleForm', component:FormComponent},
   { path: 'roleForm/:id', component:FormComponent },
   { path: 'subjects', component:SubjectViewComponent },
-  { path: 'subjectForm/:id', component: SubjectFormComponent }
+  { path: 'subjectForm/:id', component: SubjectFormComponent },
+  { path: 'users', component:UserViewComponent },
+  { path: 'userForm/:id', component: UserFormComponent },
+  { path: 'teacherSubjects', component:TeacherSubjectsViewComponent}
+
 ];
 
 @NgModule({

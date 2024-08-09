@@ -57,8 +57,22 @@
         
         "Academic year is required": "السنة الدراسية مطلوبة",
         "Academic year must be in the format YYYY or YYYY-YYYY": "يجب أن تكون السنة الدراسية في شكل YYYY أو YYYY-YYYY",
-      "Page Name":"اسم الصفحة"
+      "Page Name":"اسم الصفحة",
+    
+  "Username": "اسم المستخدم",
+  
+  "Email": "البريد الإلكتروني",
+  "Phone": "الهاتف",
+  "Age": "العمر",
+  "School Year": "السنة الدراسية",
+ 
+  
+  "No, keep it": "لا، احتفظ به",
+  
+  "The user has been deleted.": "تم حذف المستخدم.",
+  "Error": "خطأ",
+  "An error occurred while deleting the user.": "حدث خطأ أثناء حذف المستخدم."
       
-    }
+ }
     
 
