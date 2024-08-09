@@ -18,12 +18,14 @@ export class UserViewComponent implements OnInit {
     { key: 'userName', title: this.translate.instant('Username') },
     { key: 'firstName', title: this.translate.instant('First Name') },
     { key: 'email', title: this.translate.instant('Email') },
+    { key: 'password', title: this.translate.instant('Password') },
     { key: 'phone', title: this.translate.instant('Phone') },
     { key: 'age', title: this.translate.instant('Age') },
-    { key: 'dateOfBirth', title: this.translate.instant('Date of Birth') }, // Add this line for Date of Birth
     { key: 'academicYear', title: this.translate.instant('Academic Year') },
+    { key: 'dateOfBirth', title: this.translate.instant('Date of Birth') },
+
     { key: 'roleName', title: this.translate.instant('Role') },
-    { key: 'password', title: this.translate.instant('Password') }
+    
   ];
 
   actions = [
@@ -50,7 +52,7 @@ export class UserViewComponent implements OnInit {
             ...user,
             displayId: index + 1,
             roleName: this.getRoleName(user.roleId),
-            dateOfBirth: user.dateOfBirth // Include Date of Birth in the mapped user
+            // dateOfBirth: user.dateOfBirth // Include Date of Birth in the mapped user
           }));
           console.log('Users fetched successfully:', this.users);
         } else {

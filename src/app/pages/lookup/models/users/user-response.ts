@@ -1,11 +1,12 @@
 export interface UserResponse {
     id: number;
-    username: string;
-    name: string;
+    userName: string;
+    firstName: string;
     email: string;
     phone: string;
     age: number;
-    schoolYear: string;
+    password:string;
+    AcadymicYear: string;
     dateOfBirth: Date;
     roleId?: number; // Optional property
 }

@@ -73,25 +73,52 @@ export class FormComponent implements OnInit {
       },
     });
   }
+
+
+
   
   loadRole(id: number): void {
-    this.lookupService.getRoleById(id).subscribe({
-      next: (response: RoleResponse) => {
-        if (response.success && response.result) {
-          const role = response.result as Role;
-          this.roleForm.patchValue({
-            ...role,
-            SelectedPageIds: role.SelectedPageIds || []
-          });
-        } else {
-          Swal.fire('Error', 'Role not found', 'error');
-        }
-      },
-      error: (err: any) => {
-        Swal.fire('Error', 'Failed to load role', 'error');
-      },
-    });
-  }
+  this.lookupService.getRoleById(id).subscribe({
+    next: (response: RoleResponse) => {
+      if (response.success && response.result) {
+        const role = response.result as Role;
+        this.roleForm.patchValue({
+          ...role,
+          SelectedPageIds: role.SelectedPageIds || []
+        });
+
+  
+        this.loadAssignedPages(id);
+      } else {
+        Swal.fire('Error', 'Role not found', 'error');
+      }
+    },
+    error: (err: any) => {
+      Swal.fire('Error', 'Failed to load role', 'error');
+    },
+  });
+}
+
+
+loadAssignedPages(roleId: number): void {
+  this.lookupService.getAssignedPagesForRole(roleId).subscribe({
+    next: (assignedPages: Page[]) => {
+      this.dropdownOptions = assignedPages.map((page: Page) => ({
+        value: page.pageId.toString(),
+        label: page.pageName
+      }));
+
+      
+      this.roleForm.patchValue({
+        SelectedPageIds: assignedPages.map(page => page.pageId.toString())
+      });
+    },
+    error: (err: any) => {
+      Swal.fire('Error', 'Failed to load assigned pages', 'error');
+    },
+  });
+}
+
 
   save(): void {
     if (this.roleForm.valid) {

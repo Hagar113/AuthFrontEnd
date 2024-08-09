@@ -201,5 +201,13 @@ deleteUser(userId: number): Observable<void> {
 //   return this.apiConfigService.post<Page[]>(`${this.pagesEndpoint}/GetAssignedPages`, requestPayload);
 // }
 
+getAssignedPagesForRole(roleId: number): Observable<Page[]> {
+  const requestPayload: BaseRequestHeader = {
+    userId: 0,
+    languageCode: 'en',
+    data: JSON.stringify({ RoleId: roleId })
+  };
 
+  return this.apiConfigService.post<Page[]>(`${this.pagesEndpoint}/GetAssignedPages`, requestPayload);
+}
 }

@@ -124,7 +124,7 @@ export class UserFormComponent implements OnInit {
     if (this.userForm.valid) {
         // Existing save logic here
         const saveUserRequest: SaveUserRequest = {
-            userId: this.userForm.value.id,
+            id: this.userForm.value.id,
             userName: this.userForm.value.userName,
             firstName: this.userForm.value.firstName,
             email: this.userForm.value.email,
@@ -133,7 +133,7 @@ export class UserFormComponent implements OnInit {
             password: this.userForm.value.password,
             academicYear: this.userForm.value.academicYear,
             dateOfBirth: this.userForm.value.dateOfBirth,
-            role: this.userForm.value.role // This will now work as expected
+            roleId: this.userForm.value.role 
         };
 
         this.lookupService.saveUser(saveUserRequest).subscribe({
