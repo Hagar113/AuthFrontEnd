@@ -3,6 +3,7 @@ import { LookupService } from '../../service/lookup.service';
 import { Subject, SubjectResponse } from '../../models/subjects/subject-response';
 import { TeacherResponse } from '../../models/teachers/teacher-response';
 
+
 @Component({
   selector: 'app-teacher-subjects-view',
   templateUrl: './teacher-subjects-view.component.html',
@@ -39,7 +40,7 @@ export class TeacherSubjectsViewComponent implements OnInit {
 
   getTeachers(): void {
     this.lookupService.getAllTeachers().subscribe({
-      next: (response) => {
+      next: (response: { success: boolean; result: TeacherResponse[]; responseMessage?: string }) => {
         if (response.success) {
           this.teachers = Array.isArray(response.result) ? response.result : [response.result];
           console.log('Teachers fetched successfully:', this.teachers);
@@ -56,21 +57,23 @@ export class TeacherSubjectsViewComponent implements OnInit {
   saveSelection(): void {
     if (this.selectedTeacher && this.selectedSubject) {
       this.lookupService.assignSubjectToTeacher(this.selectedTeacher, this.selectedSubject).subscribe({
-        next: (result: number) => {
-          if (result === 1) {
+        next: (response: any) => {
+          if (response.success) {
             console.log('Subject assigned to teacher successfully');
-          } else if (result === -2) {
-            console.error('Teacher or subject not found');
           } else {
-            console.error('An error occurred while assigning the subject');
+            console.error('Failed to assign subject to teacher:', response.responseMessage || 'Unknown error');
           }
         },
         error: (err) => {
           console.error('Failed to assign subject to teacher', err.message);
-        },
+          console.log('Full error response:', err);
+        }
       });
     } else {
       console.error('Please select both teacher and subject');
     }
   }
+  
+  
+
 }

@@ -169,10 +169,19 @@ getAllTeachers(): Observable<{ success: boolean, result: TeacherResponse[], resp
   return this.apiConfigService.post<{ success: boolean, result: TeacherResponse[], responseMessage?: string }>(`${this.usersEndpoint}/GetAllTeachers`, requestPayload);
 }
 
-assignSubjectToTeacher(teacherId: number, subjectId: number): Observable<number> {
-  const requestPayload = { teacherId, subjectId };
-  return this.apiConfigService.post<number>(`${this.usersEndpoint}/AssignSubjectToTeacher`, requestPayload);
+assignSubjectToTeacher(teacherId: number, subjectId: number): Observable<any> {
+  const requestPayload = {
+    userId: 0,  // أو أي قيمة أخرى مناسبة
+    languageCode: 'en',  // أو حسب اللغة المطلوبة
+    data: JSON.stringify({ teacherId, subjectId })
+  };
+
+  return this.apiConfigService.post<any>(`${this.usersEndpoint}/SaveTeacherSubject`, requestPayload);
 }
+
+
+
+
 // saveUser(requestPayload: SaveUserRequest): Observable<void> {
 //   const baseRequestHeader: BaseRequestHeader = {
 //     userId: null,
@@ -222,6 +231,19 @@ getAssignedRoles(userId: number): Observable<{ success: boolean; result: Roles; 
 
   return this.apiConfigService.post<{ success: boolean; result: Roles; responseMessage?: string }>(
     `${this.usersEndpoint}/GetAssignedRole`,
+    requestPayload
+  );
+}
+
+getAssignedSubjects(teacherId: number): Observable<{ success: boolean; result: Subject; responseMessage?: string }> {
+  const requestPayload: BaseRequestHeader = {
+    userId: teacherId,
+    languageCode: 'en',
+    data: JSON.stringify({ TeacherId: teacherId }) // إذا كان الـ backend يتطلب هذا الحقل، اتركه كما هو
+  };
+
+  return this.apiConfigService.post<{ success: boolean; result: Subject; responseMessage?: string }>(
+    `${this.usersEndpoint}/GetAssignedSubject`,
     requestPayload
   );
 }
