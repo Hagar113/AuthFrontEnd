@@ -21,6 +21,7 @@ import { Roles, RolesResponse } from '../models/roles/get-all-roles-res';
 import { TeacherResponse } from '../models/teachers/teacher-response';
 import { RoleRequest } from '../models/roles/role-request';
 import { GetAssignedRoles } from '../models/users/get-assigned-roles';
+import { AssignedSubjectResponse } from '../models/subjects/assigned-subject-response';
 
 @Injectable({
   providedIn: 'root'
@@ -235,19 +236,18 @@ getAssignedRoles(userId: number): Observable<{ success: boolean; result: Roles; 
   );
 }
 
-getAssignedSubjects(teacherId: number): Observable<{ success: boolean; result: Subject; responseMessage?: string }> {
-  const requestPayload: BaseRequestHeader = {
-    userId: teacherId,
+getAssignedSubjects(teacherId: number): Observable<AssignedSubjectResponse> {
+  const requestPayload = {
+    userId: 0,  // أو أي قيمة أخرى مناسبة
     languageCode: 'en',
-    data: JSON.stringify({ TeacherId: teacherId }) // إذا كان الـ backend يتطلب هذا الحقل، اتركه كما هو
+    data: JSON.stringify({ TeacherId: teacherId })
   };
 
-  return this.apiConfigService.post<{ success: boolean; result: Subject; responseMessage?: string }>(
+  return this.apiConfigService.post<AssignedSubjectResponse>(
     `${this.usersEndpoint}/GetAssignedSubject`,
     requestPayload
   );
 }
-
 
 
 }

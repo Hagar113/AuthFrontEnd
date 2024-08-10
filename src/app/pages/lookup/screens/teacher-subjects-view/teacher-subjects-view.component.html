@@ -2,7 +2,7 @@
     <div class="form-row">
         <div class="form-group col-md-5">
             <label for="teacherDropdown">Select Teacher:</label>
-            <select id="teacherDropdown" [(ngModel)]="selectedTeacher" name="teacher" class="form-control" required>
+            <select id="teacherDropdown" [(ngModel)]="selectedTeacher" name="teacher" class="form-control" (change)="onTeacherSelectionChange()" required>
                 <option *ngFor="let teacher of teachers" [value]="teacher.id">
                     {{ teacher.name }}
                 </option>

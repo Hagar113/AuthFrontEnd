@@ -74,6 +74,26 @@ export class TeacherSubjectsViewComponent implements OnInit {
     }
   }
   
+  onTeacherSelectionChange(): void {
+    if (this.selectedTeacher) {
+      this.lookupService.getAssignedSubjects(this.selectedTeacher).subscribe({
+        next: (response) => {
+          if (response.success) {
+            this.selectedSubject = response.result.id; // Assign the subject ID
+            console.log('Assigned subject loaded:', this.selectedSubject);
+          } else {
+            console.error('Failed to load assigned subject:', response.responseMessage);
+          }
+        },
+        error: (err) => {
+          console.error('Failed to load assigned subject', err.message);
+          console.log('Full error response:', err);
+        }
+      });
+    } else {
+      this.selectedSubject = null; 
+    }
+  }
   
-
+  
 }
