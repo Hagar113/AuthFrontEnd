@@ -5,15 +5,15 @@ export interface UserResponse {
     email: string;
     phone: string;
     age: number;
-    password: string | null; // تعديل لتناسب قيمة null
-    academicYear: string; // تعديل الاسم من AcadymicYear إلى academicYear
+    password: string | null; 
+    academicYear: string; 
     dateOfBirth: Date;
-    roleCode: string; // Optional property
+    roleCode: string; 
   }
   
   export interface UserResponseWrapper {
     success: boolean;
-    result: UserResponse; // تعديل لتناسب كائن واحد بدلاً من مصفوفة
-    error?: string; // Optional field for error message
+    result: UserResponse; 
+    error?: string; 
   }
   

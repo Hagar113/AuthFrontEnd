@@ -18,7 +18,7 @@ export class UserViewComponent implements OnInit {
     { key: 'userName', title: this.translate.instant('Username') },
     { key: 'firstName', title: this.translate.instant('First Name') },
     { key: 'email', title: this.translate.instant('Email') },
-    { key: 'password', title: this.translate.instant('Password') },
+    //{ key: 'password', title: this.translate.instant('Password') },
     { key: 'phone', title: this.translate.instant('Phone') },
     { key: 'age', title: this.translate.instant('Age') },
     { key: 'academicYear', title: this.translate.instant('Academic Year') },
@@ -66,8 +66,7 @@ export class UserViewComponent implements OnInit {
   }
 
   getRoleName(roleId: number | undefined): string {
-    // Implement logic to map roleId to roleName or fetch from a service
-    return 'Role Name'; // Replace with actual role name logic
+    return 'Role Name'; 
   }
 
   addUser(): void {

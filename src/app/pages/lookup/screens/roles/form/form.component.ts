@@ -1,14 +1,16 @@
-// form.component.ts
+// src/app/pages/lookup/components/form/form.component.ts
+
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LookupService } from '../../../service/lookup.service';
-import { SaveRoleRequest } from '../../../models/roles/save-role-request'; // Adjust the path as needed
+import { SaveRoleRequest } from '../../../models/roles/save-role-request';
 import { Role, RoleResponse } from '../../../models/roles/role-response';
 import { BaseRequestHeader } from 'src/app/shared/models/base-request-header';
 import { TranslateService } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
 import { Page, PagesResponse } from '../../../models/pages/page-response';
+import { AssignedPage, AssignedPagesResponse } from '../../../models/users/get-assigned-pages';
 
 @Component({
   selector: 'app-role-form',
@@ -18,6 +20,7 @@ import { Page, PagesResponse } from '../../../models/pages/page-response';
 export class FormComponent implements OnInit {
   roleForm: FormGroup;
   id: number | null = null;
+  allPages: Page[] = []; // Store all pages
   dropdownOptions: Array<{ value: string; label: string }> = [];
 
   constructor(
@@ -54,71 +57,81 @@ export class FormComponent implements OnInit {
       }
     });
   }
-
   loadPages(): void {
     this.lookupService.getAllPages().subscribe({
       next: (response: PagesResponse) => {
-        if (response.success && response.result && Array.isArray(response.result)) {
-          const pages: Page[] = response.result;
-          this.dropdownOptions = pages.map((page: Page) => ({
-            value: page.pageId.toString(), 
-            label: page.pageName
-          }));
+        if (response.success && response.result) {
+          this.allPages = response.result; 
+          this.updateDropdownOptions();
         } else {
           Swal.fire('Error', 'Failed to load pages', 'error');
         }
       },
       error: (err: any) => {
+        console.error('Error loading pages', err);
         Swal.fire('Error', 'Failed to load pages', 'error');
       },
     });
   }
-
-
-
   
+  
+
   loadRole(id: number): void {
-  this.lookupService.getRoleById(id).subscribe({
-    next: (response: RoleResponse) => {
-      if (response.success && response.result) {
-        const role = response.result as Role;
-        this.roleForm.patchValue({
-          ...role,
-          SelectedPageIds: role.SelectedPageIds || []
-        });
+    this.lookupService.getRoleById(id).subscribe({
+      next: (response: RoleResponse) => {
+        if (response.success && response.result) {
+          const role = response.result as Role;
+          this.roleForm.patchValue({
+            ...role,
+          });
 
+          this.loadAssignedPages(id); // Load assigned pages to set selected options
+        } else {
+          Swal.fire('Error', 'Role not found', 'error');
+        }
+      },
+      error: (err: any) => {
+        Swal.fire('Error', 'Failed to load role', 'error');
+      },
+    });
+  }
+
+  loadAssignedPages(roleId: number): void {
+    this.lookupService.getAssignedPagesForRole(roleId).subscribe({
+      next: (response: AssignedPagesResponse) => {
+        if (response.success && response.result) {
+          
+          const assignedPages: AssignedPage[] = response.result;
   
-        this.loadAssignedPages(id);
-      } else {
-        Swal.fire('Error', 'Role not found', 'error');
+          
+          this.dropdownOptions = this.allPages.map(page => ({
+            value: page.pageId.toString(),
+            label: page.pageName
+          }));
+  
+        
+          const selectedPageIds = assignedPages.map(page => page.id.toString());
+          this.roleForm.patchValue({
+            SelectedPageIds: selectedPageIds
+          });
+        } else {
+          Swal.fire('Error', 'Failed to load assigned pages', 'error');
+        }
+      },
+      error: (err: any) => {
+        console.error('Error loading assigned pages', err);
+        Swal.fire('Error', 'Failed to load assigned pages', 'error');
       }
-    },
-    error: (err: any) => {
-      Swal.fire('Error', 'Failed to load role', 'error');
-    },
-  });
-}
+    });
+  }
+  
 
-
-loadAssignedPages(roleId: number): void {
-  this.lookupService.getAssignedPagesForRole(roleId).subscribe({
-    next: (assignedPages: Page[]) => {
-      this.dropdownOptions = assignedPages.map((page: Page) => ({
-        value: page.pageId.toString(),
-        label: page.pageName
-      }));
-
-      
-      this.roleForm.patchValue({
-        SelectedPageIds: assignedPages.map(page => page.pageId.toString())
-      });
-    },
-    error: (err: any) => {
-      Swal.fire('Error', 'Failed to load assigned pages', 'error');
-    },
-  });
-}
-
+  updateDropdownOptions(): void {
+    this.dropdownOptions = this.allPages.map(page => ({
+      value: page.pageId.toString(),
+      label: page.pageName
+    }));
+  }
 
   save(): void {
     if (this.roleForm.valid) {

@@ -22,6 +22,8 @@ import { TeacherResponse } from '../models/teachers/teacher-response';
 import { RoleRequest } from '../models/roles/role-request';
 import { GetAssignedRoles } from '../models/users/get-assigned-roles';
 import { AssignedSubjectResponse } from '../models/subjects/assigned-subject-response';
+import { AssignedPagesResponse } from '../models/users/get-assigned-pages';
+
 
 @Injectable({
   providedIn: 'root'
@@ -212,15 +214,7 @@ deleteUser(userId: number): Observable<void> {
 //   return this.apiConfigService.post<Page[]>(`${this.pagesEndpoint}/GetAssignedPages`, requestPayload);
 // }
 
-getAssignedPagesForRole(roleId: number): Observable<Page[]> {
-  const requestPayload: BaseRequestHeader = {
-    userId: 0,
-    languageCode: 'en',
-    data: JSON.stringify({ RoleId: roleId })
-  };
 
-  return this.apiConfigService.post<Page[]>(`${this.pagesEndpoint}/GetAssignedPages`, requestPayload);
-}
 
 
 getAssignedRoles(userId: number): Observable<{ success: boolean; result: Roles; responseMessage?: string }> {
@@ -245,6 +239,19 @@ getAssignedSubjects(teacherId: number): Observable<AssignedSubjectResponse> {
 
   return this.apiConfigService.post<AssignedSubjectResponse>(
     `${this.usersEndpoint}/GetAssignedSubject`,
+    requestPayload
+  );
+}
+
+getAssignedPagesForRole(roleId: number): Observable<AssignedPagesResponse> {
+  const requestPayload: BaseRequestHeader = {
+    userId: 0, // أو استخدام معرف المستخدم المناسب إذا لزم الأمر
+    languageCode: 'en',
+    data: JSON.stringify({ roleId })
+  };
+
+  return this.apiConfigService.post<AssignedPagesResponse>(
+    `${this.pagesEndpoint}/GetAssignedPages`,
     requestPayload
   );
 }

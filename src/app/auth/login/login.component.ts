@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
-import Swal from 'sweetalert2'; // تأكد من استيراد SweetAlert2
+import Swal from 'sweetalert2'; 
 import { AuthServiceService } from '../Auth Service/auth-service.service';
 import { LoginResponse } from '../models/login-response';
 import ValidateForm from '../helpers/ValidateForm';
@@ -82,11 +82,11 @@ export class LoginComponent implements OnInit {
                 }
 
                 if (res.result && res.result.userDto && res.result.userDto.role) {
-                    const roleCode = res.result.userDto.role.code; // جلب الـ roleCode
+                    const roleCode = res.result.userDto.role.code; 
 
-                    localStorage.setItem('roleCode', roleCode); // تخزين الـ roleCode في الـ localStorage
+                    localStorage.setItem('roleCode', roleCode); 
 
-                    this.fetchPagesAndStore(res.result.userDto.id, res.result.userDto.role.id); // جلب الصفحات بناءً على roleId
+                    this.fetchPagesAndStore(res.result.userDto.id, res.result.userDto.role.id); 
                 }
 
                 Swal.fire({
@@ -124,29 +124,30 @@ export class LoginComponent implements OnInit {
 }
 
   
-  fetchPagesAndStore(userId: number, roleId: number) {
-    const request = {
-      userId: userId,
-      roleId: roleId
-    };
+fetchPagesAndStore(userId: number, roleId: number) {
+  const request = {
+    userId: userId,
+    roleId: roleId
+  };
 
-    this.auth.validateUserRole(request).subscribe({
-      next: (res: PagesResponse) => {
-        if (res.success && res.result && res.result.pages && Array.isArray(res.result.pages)) {
-          const pagesWithPaths = res.result.pages.map(page => ({
-            pageId: page.pageId,
-            pageName: page.pageName,
-            pagePath: page.pagePath || ''
-          }));
+  this.auth.validateUserRole(request).subscribe({
+    next: (res: PagesResponse) => {
+      if (res.success && res.result && Array.isArray(res.result)) {
+        const pagesWithPaths = res.result.map(page => ({
+          pageId: page.pageId,
+          pageName: page.pageName,
+          pagePath: page.pagePath || ''
+        }));
 
-          localStorage.setItem('userPages', JSON.stringify(pagesWithPaths));
-        } else {
-          console.error('Pages data is missing or invalid', res);
-        }
-      },
-      error: (err: any) => {
-        console.error('Error:', err);
+        localStorage.setItem('userPages', JSON.stringify(pagesWithPaths));
+      } else {
+        console.error('Pages data is missing or invalid', res);
       }
-    });
-  }
+    },
+    error: (err: any) => {
+      console.error('Error:', err);
+    }
+  });
+}
+
 }

@@ -1,5 +1,5 @@
 export interface SaveUserRequest {
-    id?: number; // Optional field, since it's nullable in C#
+    id?: number; 
     userName: string;
     firstName: string;
     email: string;

@@ -1,4 +1,4 @@
-// save-role-request.ts
+
 export interface SaveRoleRequest {
   id: number;
   name: string;

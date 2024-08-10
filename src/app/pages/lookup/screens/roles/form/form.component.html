@@ -68,6 +68,7 @@
                     {{ option.label | translate }}
                   </option>
                 </select>
+                
                 <div>
                   <small class="text-danger" *ngIf="SelectedPageIds?.hasError('required') && (SelectedPageIds?.dirty || SelectedPageIds?.touched)">
                     {{ 'selectionRequired' | translate }}
