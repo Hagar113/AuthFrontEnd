@@ -6,6 +6,7 @@ import { AuthServiceService } from '../Auth Service/auth-service.service';
 import { LoginResponse } from '../models/login-response';
 import ValidateForm from '../helpers/ValidateForm';
 import { PagesResponse } from 'src/app/pages/lookup/models/pages/page-response';
+import { PageRleResponse } from '../models/page-rle-response';
 
 @Component({
   selector: 'app-login',
@@ -131,9 +132,9 @@ fetchPagesAndStore(userId: number, roleId: number) {
   };
 
   this.auth.validateUserRole(request).subscribe({
-    next: (res: PagesResponse) => {
-      if (res.success && res.result && Array.isArray(res.result)) {
-        const pagesWithPaths = res.result.map(page => ({
+    next: (res: PageRleResponse) => {
+      if (res.success && res.result && Array.isArray(res.result.pages)) { // تأكد من استخدام `res.result.pages`
+        const pagesWithPaths = res.result.pages.map(page => ({
           pageId: page.pageId,
           pageName: page.pageName,
           pagePath: page.pagePath || ''

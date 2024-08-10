@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { RoleResponse } from '../models/role-response';
 import { ApiConfigService } from 'src/app/shared/shared service/api-config.service';
 import { LoginResponse } from '../models/login-response';
-import { Page, PagesResponse } from 'src/app/pages/lookup/models/pages/page-response';
+
 import { PageDto } from '../models/page-dto';
 import { mapPageToPageDto } from '../helpers/page-mapper';
+import { RoleResponse } from '../models/role-response';
+import { PageRle, PageRleResponse } from '../models/page-rle-response';
 
 interface SignupResponse {
   message: string;
@@ -36,12 +37,16 @@ export class AuthServiceService {
     return !!localStorage.getItem('token');
   }
 
-  validateUserRole(request: any): Observable<PagesResponse> {
-    return this.apiConfigService.post<PagesResponse>(`${this.endpoint}/validate-user-role`, request);
+  validateUserRole(request: any): Observable<PageRleResponse> {
+    return this.apiConfigService.post<PageRleResponse>(`${this.endpoint}/validate-user-role`, request);
   }
 
-  storeUserData(roleCode: string, pages: Page[]): void {
-    const pageDtos: PageDto[] = pages.map(mapPageToPageDto);
+  storeUserData(roleCode: string, pages: PageRle[]): void {
+    const pageDtos: PageDto[] = pages.map(page => ({
+      pageId: page.pageId,
+      pageName: page.pageName,
+      pagePath: page.pagePath
+    }));
     const dataToStore = {
       roleCode: roleCode,
       pages: pageDtos,
