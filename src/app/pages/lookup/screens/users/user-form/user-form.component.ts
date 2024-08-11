@@ -64,6 +64,10 @@ export class UserFormComponent implements OnInit {
       next: (response: UserResponseWrapper) => {
         if (response.success && response.result) {
           const user = response.result;
+          
+          // طباعة بيانات المستخدم في الكونسول
+          console.log('User data:', user);
+          
           this.userForm.patchValue({
             id: user.id,
             userName: user.userName,
@@ -76,11 +80,15 @@ export class UserFormComponent implements OnInit {
             dateOfBirth: user.dateOfBirth,
             roleId: user.roleId
           });
-
+  
           this.lookupService.getAssignedRoles(user.id).subscribe({
             next: (response: { success: boolean; result: Roles; responseMessage?: string }) => {
               if (response.success) {
                 const role = response.result;
+                
+                // طباعة بيانات الدور في الكونسول
+                console.log('Assigned role:', role);
+                
                 this.roles = [this.mapRoleToAssignedRole(role)];
                 this.selectedRole = role.code;
                 this.userForm.get('roleId')?.setValue(this.selectedRole);
@@ -119,6 +127,7 @@ export class UserFormComponent implements OnInit {
       }
     });
   }
+  
 
   loadRoles(): void {
     this.lookupService.getRoles().subscribe({
