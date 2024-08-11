@@ -145,10 +145,13 @@
               <label for="role">
                 {{ 'Role' | translate }}: <span class="text-danger">*</span>
               </label>
-              <select formControlName="role">
+              <!-- <select formControlName="role">
                 <option *ngFor="let role of roles" [value]="role.code">{{ role.name }}</option>
+              </select> -->
+              <select formControlName="roleId"> 
+                <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
               </select>
-          
+              
               <div>
                 <small class="text-danger" *ngIf="userForm.get('role')?.hasError('required') && (userForm.get('role')?.dirty || userForm.get('role')?.touched)">
                   {{ 'Role is required' | translate }}

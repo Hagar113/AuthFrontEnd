@@ -8,7 +8,7 @@ export interface UserResponse {
     password: string | null; 
     academicYear: string; 
     dateOfBirth: Date;
-    roleCode: string; 
+    roleId: number;
   }
   
   export interface UserResponseWrapper {

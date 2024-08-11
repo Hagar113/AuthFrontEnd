@@ -5,7 +5,6 @@ import { LookupService } from '../../../service/lookup.service';
 import { SaveUserRequest } from '../../../models/users/save-user-request';
 import { UserResponseWrapper } from '../../../models/users/user-response';
 import { GetAssignedRoles } from '../../../models/users/get-assigned-roles';
-
 import Swal from 'sweetalert2';
 import { Roles } from '../../../models/roles/get-all-roles-res';
 
@@ -36,7 +35,7 @@ export class UserFormComponent implements OnInit {
       password: ['', [Validators.required, Validators.minLength(6)]],
       academicYear: ['', [Validators.required, Validators.pattern(/^\d{4}(-\d{4})?$/)]],
       dateOfBirth: ['', [Validators.required]],
-      role: [null, [Validators.required]]
+      roleId: [null, [Validators.required]]
     });
   }
 
@@ -65,16 +64,26 @@ export class UserFormComponent implements OnInit {
       next: (response: UserResponseWrapper) => {
         if (response.success && response.result) {
           const user = response.result;
-          this.userForm.patchValue(user);
+          this.userForm.patchValue({
+            id: user.id,
+            userName: user.userName,
+            firstName: user.firstName,
+            email: user.email,
+            phone: user.phone,
+            age: user.age,
+            password: user.password,
+            academicYear: user.academicYear,
+            dateOfBirth: user.dateOfBirth,
+            roleId: user.roleId
+          });
 
-          // Load assigned role
           this.lookupService.getAssignedRoles(user.id).subscribe({
             next: (response: { success: boolean; result: Roles; responseMessage?: string }) => {
               if (response.success) {
                 const role = response.result;
-                this.roles = [this.mapRoleToAssignedRole(role)]; // تحويل البيانات إلى GetAssignedRoles
-                this.selectedRole = role.code; // Set the selected role code
-                this.userForm.get('role')?.setValue(this.selectedRole);
+                this.roles = [this.mapRoleToAssignedRole(role)];
+                this.selectedRole = role.code;
+                this.userForm.get('roleId')?.setValue(this.selectedRole);
               } else {
                 Swal.fire({
                   icon: 'error',
@@ -115,7 +124,7 @@ export class UserFormComponent implements OnInit {
     this.lookupService.getRoles().subscribe({
       next: (response: { success: boolean; result: Roles[]; responseMessage?: string }) => {
         if (response.success) {
-          this.roles = response.result.map(role => this.mapRoleToAssignedRole(role)); 
+          this.roles = response.result.map(role => this.mapRoleToAssignedRole(role));
         } else {
           console.error('Failed to retrieve roles:', response.responseMessage);
           Swal.fire({
@@ -138,7 +147,7 @@ export class UserFormComponent implements OnInit {
 
   private mapRoleToAssignedRole(role: Roles): GetAssignedRoles {
     return {
-      id: Number(role.id), 
+      id: Number(role.id),
       code: role.code,
       name: role.name
     };
@@ -226,7 +235,7 @@ export class UserFormComponent implements OnInit {
     return this.userForm.get('dateOfBirth');
   }
 
-  get role() {
-    return this.userForm.get('role');
+  get roleId() {
+    return this.userForm.get('roleId');
   }
 }
