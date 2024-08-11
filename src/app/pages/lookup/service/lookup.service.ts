@@ -24,6 +24,7 @@ import { GetAssignedRoles } from '../models/users/get-assigned-roles';
 import { AssignedSubjectResponse } from '../models/subjects/assigned-subject-response';
 import { AssignedPagesResponse } from '../models/users/get-assigned-pages';
 import { RolesResponse } from '../models/roles/get-all-roles-res';
+import { UsersResponseWrapper } from '../models/users/user-response-by-id';
 
 
 @Injectable({
@@ -145,14 +146,14 @@ getAllUsers(): Observable<UserResponseWrapper> {
   return this.apiConfigService.post<UserResponseWrapper>(`${this.usersEndpoint}/GetAllUsers`, requestPayload);
 }
 
-getUserById(id: number): Observable<UserResponseWrapper> {
+getUserById(id: number): Observable<UsersResponseWrapper> {
   const requestPayload = {
     userId: 0, // يمكن تغيير هذا إلى أي قيمة مناسبة حسب الحاجة
     languageCode: 'en',
     data: JSON.stringify({ userId: id }) // تأكد من أن `userId` يتطابق مع الاسم المستخدم في الـ JSON
   };
 
-  return this.apiConfigService.post<UserResponseWrapper>(`${this.usersEndpoint}/GetUserById`, requestPayload);
+  return this.apiConfigService.post<UsersResponseWrapper>(`${this.usersEndpoint}/GetUserById`, requestPayload);
 }
 
 saveUser(requestPayload: SaveUserRequest): Observable<void> {

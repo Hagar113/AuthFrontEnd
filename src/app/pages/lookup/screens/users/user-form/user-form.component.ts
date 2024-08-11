@@ -7,6 +7,7 @@ import { UserResponseWrapper } from '../../../models/users/user-response';
 import { GetAssignedRoles } from '../../../models/users/get-assigned-roles';
 import Swal from 'sweetalert2';
 import { Role, RolesResponse } from '../../../models/roles/get-all-roles-res';
+import { UsersResponseWrapper } from '../../../models/users/user-response-by-id';
 
 
 @Component({
@@ -62,13 +63,10 @@ export class UserFormComponent implements OnInit {
 
   loadUser(id: number): void {
     this.lookupService.getUserById(id).subscribe({
-      next: (response: UserResponseWrapper) => {
+      next: (response: UsersResponseWrapper) => {
         if (response.success && response.result) {
           const user = response.result;
-          
-      
-          console.log('User data:', user);
-          
+  
           this.userForm.patchValue({
             id: user.id,
             userName: user.userName,
@@ -79,10 +77,8 @@ export class UserFormComponent implements OnInit {
             password: user.password,
             academicYear: user.academicYear,
             dateOfBirth: user.dateOfBirth,
-            roleId: user.roleId
+            roleId: user.roleId 
           });
-  
-       
         } else {
           Swal.fire({
             icon: 'error',
@@ -102,8 +98,14 @@ export class UserFormComponent implements OnInit {
     });
   }
   
+  
+  mapRoleCodeToId(roleCode: string): number | null {
+    const role = this.roles.find(r => r.roleCode === roleCode);
+    return role ? role.id : null;
+  }
+  
 
- loadRoles(): void {
+  loadRoles(): void {
     this.lookupService.getAllRoles().subscribe({
       next: (response: RolesResponse) => {
         if (response.success) {
@@ -127,6 +129,7 @@ export class UserFormComponent implements OnInit {
       }
     });
   }
+  
 
 
   saveUser(): void {
@@ -138,9 +141,13 @@ export class UserFormComponent implements OnInit {
       });
       return;
     }
-
-    const userRequest: SaveUserRequest = this.userForm.value;
-
+  
+    const formValues = this.userForm.value;
+    const userRequest: SaveUserRequest = {
+      ...formValues,
+      roleId: formValues.roleId ?? undefined // Ensure roleId is not null if your API expects a number
+    };
+  
     this.lookupService.saveUser(userRequest).subscribe({
       next: () => {
         Swal.fire({
@@ -161,6 +168,7 @@ export class UserFormComponent implements OnInit {
       }
     });
   }
+  
 
   cancel(): void {
     Swal.fire({
