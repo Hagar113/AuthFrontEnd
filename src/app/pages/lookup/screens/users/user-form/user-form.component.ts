@@ -6,7 +6,8 @@ import { SaveUserRequest } from '../../../models/users/save-user-request';
 import { UserResponseWrapper } from '../../../models/users/user-response';
 import { GetAssignedRoles } from '../../../models/users/get-assigned-roles';
 import Swal from 'sweetalert2';
-import { Roles } from '../../../models/roles/get-all-roles-res';
+import { Role, RolesResponse } from '../../../models/roles/get-all-roles-res';
+
 
 @Component({
   selector: 'app-user-form',
@@ -16,7 +17,7 @@ import { Roles } from '../../../models/roles/get-all-roles-res';
 export class UserFormComponent implements OnInit {
   userForm: FormGroup;
   id: number | null = null;
-  roles: GetAssignedRoles[] = [];
+  roles: Role[] = [];
   selectedRole: string = '';
 
   constructor(
@@ -65,7 +66,7 @@ export class UserFormComponent implements OnInit {
         if (response.success && response.result) {
           const user = response.result;
           
-          // طباعة بيانات المستخدم في الكونسول
+      
           console.log('User data:', user);
           
           this.userForm.patchValue({
@@ -81,34 +82,7 @@ export class UserFormComponent implements OnInit {
             roleId: user.roleId
           });
   
-          this.lookupService.getAssignedRoles(user.id).subscribe({
-            next: (response: { success: boolean; result: Roles; responseMessage?: string }) => {
-              if (response.success) {
-                const role = response.result;
-                
-                // طباعة بيانات الدور في الكونسول
-                console.log('Assigned role:', role);
-                
-                this.roles = [this.mapRoleToAssignedRole(role)];
-                this.selectedRole = role.code;
-                this.userForm.get('roleId')?.setValue(this.selectedRole);
-              } else {
-                Swal.fire({
-                  icon: 'error',
-                  title: 'Error',
-                  text: response.responseMessage || 'Failed to load assigned role'
-                });
-              }
-            },
-            error: (err: any) => {
-              console.error('Failed to load assigned role', err);
-              Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Failed to load assigned role'
-              });
-            }
-          });
+       
         } else {
           Swal.fire({
             icon: 'error',
@@ -129,11 +103,11 @@ export class UserFormComponent implements OnInit {
   }
   
 
-  loadRoles(): void {
-    this.lookupService.getRoles().subscribe({
-      next: (response: { success: boolean; result: Roles[]; responseMessage?: string }) => {
+ loadRoles(): void {
+    this.lookupService.getAllRoles().subscribe({
+      next: (response: RolesResponse) => {
         if (response.success) {
-          this.roles = response.result.map(role => this.mapRoleToAssignedRole(role));
+          this.roles = response.result;
         } else {
           console.error('Failed to retrieve roles:', response.responseMessage);
           Swal.fire({
@@ -154,13 +128,6 @@ export class UserFormComponent implements OnInit {
     });
   }
 
-  private mapRoleToAssignedRole(role: Roles): GetAssignedRoles {
-    return {
-      id: Number(role.id),
-      code: role.code,
-      name: role.name
-    };
-  }
 
   saveUser(): void {
     if (this.userForm.invalid) {

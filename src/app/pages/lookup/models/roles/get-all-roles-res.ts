@@ -1,12 +1,17 @@
-export interface Roles {
-    id: string;  
-    name: string;
-    code:string;
+
+
+export interface RolesResponse {
+    statusCode: number;
+    requestId: string;
+    error: any[];  
+    result: Role[];
+    success: boolean;
+    responseMessage: string;
   }
   
-  export interface RolesResponse {
-    success: boolean;
-    result: Roles[]; 
-    responseMessage?: string;
+  export interface Role {
+    id: number;
+    name: string;
+    roleCode: string;
   }
   

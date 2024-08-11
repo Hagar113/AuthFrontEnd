@@ -4,6 +4,7 @@ import { LookupService } from '../../../service/lookup.service';
 import { Role, RoleResponse } from '../../../models/roles/role-response';
 import Swal from 'sweetalert2';
 import { TranslateService } from '@ngx-translate/core';
+import { RolesResponse } from '../../../models/roles/get-all-roles-res';
 
 @Component({
   selector: 'app-view',
@@ -35,12 +36,13 @@ export class ViewComponent implements OnInit {
 
   getRoles(): void {
     this.lookupService.getAllRoles().subscribe({
-      next: (response: RoleResponse) => {
+      next: (response: RolesResponse) => {
         if (response.success) {
           const roles = Array.isArray(response.result) ? response.result : [response.result];
           this.roles = roles.map((role, index) => ({
             ...role,
             displayId: index + 1,
+            SelectedPageIds: [] 
           }));
           console.log('Roles fetched successfully:', this.roles);
         } else {
@@ -53,7 +55,7 @@ export class ViewComponent implements OnInit {
       },
     });
   }
-
+  
   setTranslations(): void {
     this.translate.get(['Id', 'Name', 'Role Code', 'Edit', 'Delete', 'Add', 'Actions']).subscribe(translations => {
       this.columns[0].title = translations['Id'];

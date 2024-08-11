@@ -8,7 +8,8 @@ export interface UserResponse {
     password: string | null; 
     academicYear: string; 
     dateOfBirth: Date;
-    roleId: number;
+    roleId: string;
+
   }
   
   export interface UserResponseWrapper {

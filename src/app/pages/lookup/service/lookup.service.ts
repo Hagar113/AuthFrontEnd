@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { tap, catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
-import { map } from 'rxjs/operators'; // استيراد map من rxjs
+import { map } from 'rxjs/operators'; 
 
 import { Observable } from 'rxjs';
 
@@ -16,13 +16,14 @@ import { BaseRequestHeader } from 'src/app/shared/models/base-request-header';
 import { Page, PagesResponse } from '../models/pages/page-response';
 import { UserResponse, UserResponseWrapper } from '../models/users/user-response';
 import { SaveUserRequest } from '../models/users/save-user-request';
-import { RoleRrsDropdown } from '../models/users/role-rrs-dropdown';
-import { Roles, RolesResponse } from '../models/roles/get-all-roles-res';
+
+
 import { TeacherResponse } from '../models/teachers/teacher-response';
 import { RoleRequest } from '../models/roles/role-request';
 import { GetAssignedRoles } from '../models/users/get-assigned-roles';
 import { AssignedSubjectResponse } from '../models/subjects/assigned-subject-response';
 import { AssignedPagesResponse } from '../models/users/get-assigned-pages';
+import { RolesResponse } from '../models/roles/get-all-roles-res';
 
 
 @Injectable({
@@ -35,15 +36,11 @@ export class LookupService {
   private usersEndpoint = 'Admin';
   constructor(private apiConfigService: ApiConfigService) { }
 
-  getAllRoles(): Observable<RoleResponse> {
-    return this.apiConfigService.get<RoleResponse>(`${this.endpoint}/GetAllRoles`);
-  }
-  
-  getRoles(): Observable<RolesResponse> {
+  getAllRoles(): Observable<RolesResponse> { // تأكدي من أن هذا النوع هو RolesResponse
     return this.apiConfigService.get<RolesResponse>(`${this.endpoint}/GetAllRoles`);
-  }
-  
+}
 
+  
   getRoleById(id: number): Observable<RoleResponse> {
     const requestPayload = {
       userId: null, 
@@ -149,14 +146,15 @@ getAllUsers(): Observable<UserResponseWrapper> {
 }
 
 getUserById(id: number): Observable<UserResponseWrapper> {
-  const requestPayload: BaseRequestHeader = {
-    userId: null,
+  const requestPayload = {
+    userId: 0, // يمكن تغيير هذا إلى أي قيمة مناسبة حسب الحاجة
     languageCode: 'en',
-    data: JSON.stringify({ UserId: id })
+    data: JSON.stringify({ userId: id }) // تأكد من أن `userId` يتطابق مع الاسم المستخدم في الـ JSON
   };
 
   return this.apiConfigService.post<UserResponseWrapper>(`${this.usersEndpoint}/GetUserById`, requestPayload);
 }
+
 saveUser(requestPayload: SaveUserRequest): Observable<void> {
   const baseRequestHeader: BaseRequestHeader = {
     userId: 0, // أو أي قيمة مناسبة
@@ -217,18 +215,6 @@ deleteUser(userId: number): Observable<void> {
 
 
 
-getAssignedRoles(userId: number): Observable<{ success: boolean; result: Roles; responseMessage?: string }> {
-  const requestPayload: BaseRequestHeader = {
-    userId: userId,
-    languageCode: 'en',
-    data: JSON.stringify({ UserId: userId })
-  };
-
-  return this.apiConfigService.post<{ success: boolean; result: Roles; responseMessage?: string }>(
-    `${this.usersEndpoint}/GetAssignedRole`,
-    requestPayload
-  );
-}
 
 getAssignedSubjects(teacherId: number): Observable<AssignedSubjectResponse> {
   const requestPayload = {
