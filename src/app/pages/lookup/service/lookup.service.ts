@@ -37,7 +37,7 @@ export class LookupService {
   private usersEndpoint = 'Admin';
   constructor(private apiConfigService: ApiConfigService) { }
 
-  getAllRoles(): Observable<RolesResponse> { // تأكدي من أن هذا النوع هو RolesResponse
+  getAllRoles(): Observable<RolesResponse> { 
     return this.apiConfigService.get<RolesResponse>(`${this.endpoint}/GetAllRoles`);
 }
 
@@ -148,9 +148,9 @@ getAllUsers(): Observable<UserResponseWrapper> {
 
 getUserById(id: number): Observable<UsersResponseWrapper> {
   const requestPayload = {
-    userId: 0, // يمكن تغيير هذا إلى أي قيمة مناسبة حسب الحاجة
+    userId: 0, 
     languageCode: 'en',
-    data: JSON.stringify({ userId: id }) // تأكد من أن `userId` يتطابق مع الاسم المستخدم في الـ JSON
+    data: JSON.stringify({ userId: id }) 
   };
 
   return this.apiConfigService.post<UsersResponseWrapper>(`${this.usersEndpoint}/GetUserById`, requestPayload);
@@ -158,9 +158,9 @@ getUserById(id: number): Observable<UsersResponseWrapper> {
 
 saveUser(requestPayload: SaveUserRequest): Observable<void> {
   const baseRequestHeader: BaseRequestHeader = {
-    userId: 0, // أو أي قيمة مناسبة
-    languageCode: 'en', // أو أي قيمة مناسبة
-    data: JSON.stringify(requestPayload) // تحويل الكائن إلى سلسلة JSON
+    userId: 0, 
+    languageCode: 'en', 
+    data: JSON.stringify(requestPayload) 
   };
 
   return this.apiConfigService.post<void>(`${this.usersEndpoint}/SaveUser`, baseRequestHeader);
@@ -188,7 +188,7 @@ assignSubjectToTeacher(teacherId: number, subjectId: number): Observable<any> {
 //   const baseRequestHeader: BaseRequestHeader = {
 //     userId: null,
 //     languageCode: 'en',
-//     data: JSON.stringify(requestPayload) // تأكد من أن requestPayload متوافق مع SaveUserRequest
+//     data: JSON.stringify(requestPayload) 
 //   };
 
 //   return this.apiConfigService.post<void>(`${this.usersEndpoint}/SaveUser`, baseRequestHeader);
@@ -219,7 +219,7 @@ deleteUser(userId: number): Observable<void> {
 
 getAssignedSubjects(teacherId: number): Observable<AssignedSubjectResponse> {
   const requestPayload = {
-    userId: 0,  // أو أي قيمة أخرى مناسبة
+    userId: 0, 
     languageCode: 'en',
     data: JSON.stringify({ TeacherId: teacherId })
   };
@@ -232,7 +232,7 @@ getAssignedSubjects(teacherId: number): Observable<AssignedSubjectResponse> {
 
 getAssignedPagesForRole(roleId: number): Observable<AssignedPagesResponse> {
   const requestPayload: BaseRequestHeader = {
-    userId: 0, // أو استخدام معرف المستخدم المناسب إذا لزم الأمر
+    userId: 0,
     languageCode: 'en',
     data: JSON.stringify({ roleId })
   };

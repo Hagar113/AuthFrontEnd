@@ -34,12 +34,12 @@ export class FormComponent implements OnInit {
       id: [null],
       name: ['', [Validators.required, Validators.minLength(3)]],
       roleCode: ['', [Validators.required, Validators.pattern(/^[A-Z0-9]{3,10}$/)]],
-      SelectedPageIds: [[], Validators.required] // Ensure this is an array of numbers
+      SelectedPageIds: [[], Validators.required] 
     });
   }
 
   ngOnInit(): void {
-    this.loadPages(); // Load pages when component initializes
+    this.loadPages(); 
 
     this.route.paramMap.subscribe((params) => {
       this.id = +params.get('id')!;
@@ -85,7 +85,7 @@ export class FormComponent implements OnInit {
             ...role,
           });
 
-          this.loadAssignedPages(id); // Load assigned pages to set selected options
+          this.loadAssignedPages(id); 
         } else {
           Swal.fire('Error', 'Role not found', 'error');
         }

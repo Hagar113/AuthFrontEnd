@@ -133,7 +133,7 @@ fetchPagesAndStore(userId: number, roleId: number) {
 
   this.auth.validateUserRole(request).subscribe({
     next: (res: PageRleResponse) => {
-      if (res.success && res.result && Array.isArray(res.result.pages)) { // تأكد من استخدام `res.result.pages`
+      if (res.success && res.result && Array.isArray(res.result.pages)) { 
         const pagesWithPaths = res.result.pages.map(page => ({
           pageId: page.pageId,
           pageName: page.pageName,

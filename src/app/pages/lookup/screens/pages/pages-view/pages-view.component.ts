@@ -21,12 +21,12 @@ export class PagesViewComponent implements OnInit {
   constructor(
     private lookupService: LookupService, 
     private router: Router,
-    private translate: TranslateService // حقن خدمة الترجمة
+    private translate: TranslateService 
   ) {}
 
   ngOnInit(): void {
     this.getPages();
-    this.loadTranslations(); // تحميل الترجمة عند تهيئة المكون
+    this.loadTranslations(); 
   }
 
   getPages(): void {

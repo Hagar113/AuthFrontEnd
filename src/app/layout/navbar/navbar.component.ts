@@ -16,7 +16,7 @@ export class NavbarComponent implements OnInit {
   showNavbar: boolean = true;
 
   constructor(private translate: TranslateService, private auth: AuthServiceService, private router: Router) {
-    this.currentLang = localStorage.getItem('currentLang') || 'en'; // Default to 'en' if not set
+    this.currentLang = localStorage.getItem('currentLang') || 'en'; 
     this.translate.use(this.currentLang);
 
     // Listen to route changes
@@ -58,7 +58,7 @@ export class NavbarComponent implements OnInit {
   switchLanguage(language: string) {
     localStorage.setItem('currentLang', language);
     this.translate.use(language);
-    // Optional: Reload the page to apply language changes
+    //Reload the page to apply language changes
     window.location.reload(); 
   }
 

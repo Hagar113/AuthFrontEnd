@@ -16,8 +16,8 @@ export interface UsersResponseWrapper {
     age: number;
     password: string;
     academicYear: string;
-    dateOfBirth: string; // أو Date إذا كنت تفضل استخدام نوع التاريخ
-    roleCode: string; // تأكد من أن هذا يتطابق مع الـ roleId في النموذج
+    dateOfBirth: string; 
+    roleCode: string; 
     roleId: number;
   }
   

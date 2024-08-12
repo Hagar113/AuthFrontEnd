@@ -10,6 +10,7 @@ import { PagesFormComponent } from './screens/pages/pages-form/pages-form.compon
 import { UserViewComponent } from './screens/users/user-view/user-view.component';
 import { UserFormComponent } from './screens/users/user-form/user-form.component';
 import { TeacherSubjectsViewComponent } from './screens/teacher-subjects-view/teacher-subjects-view.component';
+import { Erorr404Component } from './screens/erorr404/erorr404.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -22,8 +23,8 @@ const routes: Routes = [
   { path: 'subjectForm/:id', component: SubjectFormComponent },
   { path: 'users', component:UserViewComponent },
   { path: 'userForm/:id', component: UserFormComponent },
-  { path: 'teacherSubjects', component:TeacherSubjectsViewComponent}
-
+  { path: 'teacherSubjects', component:TeacherSubjectsViewComponent},
+  //{ path: 'erorr404', component:Erorr404Component },
 ];
 
 @NgModule({

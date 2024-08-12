@@ -15,7 +15,7 @@ const routes: Routes = [
     canActivate: [AuthGuard]  
   },
   { 
-    path: '**', redirectTo: '/auth/signup' 
+    path: '**', redirectTo: '/pages/lookup/erorr404' 
   },
 ];
 
